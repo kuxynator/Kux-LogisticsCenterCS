@@ -1,0 +1,14 @@
+{
+    "name": "AEAA593E-CC01-490C-BFB5-DE8E5023B5A6",
+    "version": "2.0.3",
+    "title": "Kuxynator's Compatibility Mod AEAA593E-CC01-490C-BFB5-DE8E5023B5A6",
+    "author": "kuxynator",
+    "homepage": "",
+    "contact": "",
+    "description": "Mod for compatibility. This mod is a dependency and is added automatically. Manual download is not necessary.\r\nRepacked mod. All credits to original author.",
+    "factorio_version": "1.1",
+    "dependencies": [
+		"! ab_logisticscenter",
+        "? ab_loaderunlock"
+    ]
+}
