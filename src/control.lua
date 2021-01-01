@@ -1,3 +1,5 @@
+if script.active_mods["gvv"] then require("__gvv__.gvv")() end
+
 require('config')
 require('logistics_center.init_globals')
 

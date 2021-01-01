@@ -129,6 +129,8 @@ data:extend({
     }
 })
 
+
+--[[ --TODO KUX MODIFICATION there is only one center in the ship
 data:extend({
     {
         type = 'recipe',
@@ -144,6 +146,7 @@ data:extend({
         result = g_names.logistics_center
     }
 })
+]]
 
 data:extend({
     {

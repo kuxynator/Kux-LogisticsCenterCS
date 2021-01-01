@@ -1,1 +1,1 @@
-@..\Tools\%~nx0 AEAA593E-CC01-490C-BFB5-DE8E5023B5A6
+@..\Tools\%~nx0

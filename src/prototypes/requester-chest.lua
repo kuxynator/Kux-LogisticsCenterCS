@@ -1,7 +1,8 @@
 require('config')
-
+---[[
 data:extend(
     {
+		--TODO KUX MODIFICATION change to normal container (not yet working > crash)
         {
             type = 'logistic-container',
             name = g_names.requester_chest_1_1,
@@ -74,3 +75,21 @@ data:extend(
         }
     }
 )
+--]]--
+--[[
+--local entity = table.deepcopy(data.raw["logistic-container"]["logistic-chest-requester"])
+--local recipe = table.deepcopy(data.raw.recipe["logistic-chest-requester"])
+--local item   = table.deepcopy(data.raw.item["logistic-chest-requester"])
+local entity = table.deepcopy(data.raw["container"]["steel-chest"])
+local recipe = table.deepcopy(data.raw.recipe["steel-chest"])
+local item   = table.deepcopy(data.raw.item["steel-chest"])
+
+item.name=g_names.requester_chest_1_1
+item.place_result = g_names.requester_chest_1_1
+recipe.name=g_names.requester_chest_1_1
+recipe.result = g_names.requester_chest_1_1
+entity.name=g_names.requester_chest_1_1
+
+data:extend({entity,item,recipe})
+--print(entity.type.."."..entity.name .. " = \n"..serpent.block(entity))
+--]]--

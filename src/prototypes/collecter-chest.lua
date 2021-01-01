@@ -5,8 +5,12 @@ local function make_prototype(name, icon, inventory_size, max_health, width, hei
     local h_height = height / 2
     data:extend(
         {
+			--TODO KUX MODIFICATION change to logistic-container passive-provider (not working > crash)
             {
-                type = 'container',
+				type = 'container',
+				--logistic_mode = "passive-provider",
+				--logistic_slots_count = 1,
+				--render_not_in_network_icon = false,
                 name = name,
                 icon = icon,
                 icon_size = 32,
@@ -33,12 +37,11 @@ local function make_prototype(name, icon, inventory_size, max_health, width, hei
                 },
                 circuit_wire_max_distance = 9,
                 localised_description = {'item-description.ab-lc-collecter-chest'}
-            }
-        }
+			}
+		}
     )
 
-    data:extend(
-        {
+    data:extend({
             {
                 type = 'recipe',
                 name = name,
@@ -50,8 +53,7 @@ local function make_prototype(name, icon, inventory_size, max_health, width, hei
         }
     )
 
-    data:extend(
-        {
+    data:extend({
             {
                 type = 'item',
                 name = name,
@@ -84,3 +86,5 @@ local ingredients_1_1 = {
 
 -- name,icon,inventory_size,max_health,width,height,picture,ingredients
 make_prototype(g_names.collecter_chest_1_1, icon_1_1, 48, 250, 1, 1, picture_1_1, ingredients_1_1)
+
+

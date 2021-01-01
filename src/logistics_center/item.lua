@@ -20,7 +20,8 @@ function ITEM:add(name)
     end
 
     -- add item
-    local item = {index = index, stock = 0, enable = true, max_control = global.technologies.lc_capacity}
+    --local item = {index = index, stock = 0, enable = true, max_control = global.technologies.lc_capacity}
+    local item = {index = index, stock = 0, enable = true, max_control = 100} --TODO KUX Modification default number of max items
     global.items_stock.items[name] = item
     global.items_stock.index = global.items_stock.index + 1
 
