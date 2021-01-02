@@ -1,15 +1,18 @@
 {
-    "name": "AEAA593E-CC01-490C-BFB5-DE8E5023B5A6",
-    "version": "2.1.0",
-    "title": "Kuxynator's Compatibility Mod AEAA593E-CC01-490C-BFB5-DE8E5023B5A6",
+    "name": "Kux-LogisticsCenterCS",
+    "version": "2.0.0",
+    "title": "Crash-Site Logistics Center",
     "author": "kuxynator",
     "homepage": "",
     "contact": "",
-    "description": "Mod for compatibility. This mod is a dependency and is added automatically. Manual download is not necessary.\r\nRepacked mod. All credits to original author.",
+    "description": "A logistics center was recovered from the crashed space ship. It could be modified to help you build your base.",
     "factorio_version": "1.1",
     "dependencies": [
 		"base",
+		"? Krastorio2",
+		"? space-exploration",
 		"! ab_logisticscenter",
-        "? ab_loaderunlock"
+		"? ab_loaderunlock",
+		"! AEAA593E-CC01-490C-BFB5-DE8E5023B5A6"
     ]
 }

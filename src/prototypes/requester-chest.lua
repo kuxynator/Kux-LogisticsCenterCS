@@ -6,7 +6,8 @@ data:extend(
         {
             type = 'logistic-container',
             name = g_names.requester_chest_1_1,
-            logistic_mode = 'requester',
+			--logistic_mode = 'requester',
+			logistic_mode = 'buffer', --TODO KUX
             logistic_slots_count = g_startup_settings.rc_logistic_slots_count,
             render_not_in_network_icon = false,
             icon = LC_PATH .. '/graphics/icons/requester-chest.png',
@@ -84,11 +85,11 @@ local entity = table.deepcopy(data.raw["container"]["steel-chest"])
 local recipe = table.deepcopy(data.raw.recipe["steel-chest"])
 local item   = table.deepcopy(data.raw.item["steel-chest"])
 
-item.name=g_names.requester_chest_1_1
-item.place_result = g_names.requester_chest_1_1
-recipe.name=g_names.requester_chest_1_1
-recipe.result = g_names.requester_chest_1_1
-entity.name=g_names.requester_chest_1_1
+--item.name=g_names.requester_chest_1_1
+--item.place_result = g_names.requester_chest_1_1
+--recipe.name=g_names.requester_chest_1_1
+--recipe.result = g_names.requester_chest_1_1
+--entity.name=g_names.requester_chest_1_1
 
 data:extend({entity,item,recipe})
 --print(entity.type.."."..entity.name .. " = \n"..serpent.block(entity))

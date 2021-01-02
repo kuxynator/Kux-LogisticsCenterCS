@@ -121,7 +121,8 @@ function CHEST:calc_power_consumption(distance, eei, chest_type)
         end
 
         -- if string.match(entity.name,names.collecter_chest_pattern) ~= nil then this is not recommended
-        if chest_type == 1 then -- entity.name == names.collecter_chest_1_1 then --- or
+		if chest_type == 1 then 
+			-- entity.name == names.collecter_chest_1_1 then --- or
             -- entity.name == names.collecter_chest_3_6 or
             -- entity.name == names.collecter_chest_6_3
             ret.power_consumption = math_ceil(distance * global.technologies.cc_power_consumption * multiplier)
@@ -199,15 +200,28 @@ function CHEST:re_scan_chests()
         local ccs = surface.find_entities_filtered {name = names.collecter_chest_1_1}
         for k1, v in pairs(ccs) do
             re_scan_add_cc(v)
+		end
+		local ccspp = surface.find_entities_filtered {name = names.collecter_chest_1_1.."-pp"} --TODO KUX MODIFICATION
+        for k1, v in pairs(ccs) do
+            re_scan_add_cc(v)
+		end
+		local ccss = surface.find_entities_filtered {name = names.collecter_chest_1_1.."-s"} --TODO KUX MODIFICATION
+        for k1, v in pairs(ccs) do
+            re_scan_add_cc(v)
         end
-        total_ccs = total_ccs + #ccs
-
+		total_ccs = total_ccs + #ccs + #ccspp + #ccss
+		
         -- re-scan requester chests
         local rcs = surface.find_entities_filtered {name = names.requester_chest_1_1}
         for k1, v in pairs(rcs) do
             re_scan_add_rc(v)
-        end
-        total_rcs = total_rcs + #rcs
+		end		
+		local rcsb = surface.find_entities_filtered {name = names.requester_chest_1_1.."b"} --TODO KUX MODIFICATION
+        for k1, v in pairs(rcs) do
+            re_scan_add_rc(v)
+		end
+		
+        total_rcs = total_rcs + #rcs + #rcsb
     end
 
     game.print('requester chests: ' .. total_rcs .. '  collector chests: ' .. total_ccs)

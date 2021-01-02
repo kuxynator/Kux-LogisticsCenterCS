@@ -110,4 +110,4 @@ end
 g_config = get_config()
 g_names = get_names()
 g_startup_settings = get_startup_settings()
-LC_PATH = '__AEAA593E-CC01-490C-BFB5-DE8E5023B5A6__'
+LC_PATH = '__Kux-LogisticsCenterCS__'

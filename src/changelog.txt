@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2021-01-01
+  Features:
+    - Crash site support
+    - additional logistic chests
+  Changes:
+    - Limitation for multiple surfaces (until a compatible solution is developed):
+      - only 1 logistics center is allowed
+      - Factorissimo2 buildings can currently not have a logistics center anymore
+      - other surfaces (e.g. surfaces_reloaded) con not have a logistics center anymore
+
+---------------------------------------------------------------------------------------------------
+Version: 0.0.0
+  Info:
+    - cloned from https://mods.factorio.com/mod/ab_logisticscenter
+
