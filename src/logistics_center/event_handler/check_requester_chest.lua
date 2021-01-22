@@ -31,43 +31,49 @@ function check_rcs_on_nth_tick(nth_tick_event)
                 if chest.nearest_lc ~= nil then
                     local eei = chest.nearest_lc.eei
                     local power_consumption = chest.nearest_lc.power_consumption
-                    local inventory = chest.entity.get_output_inventory()
+					local inventory = chest.entity.get_output_inventory()					
+					
+					for i = 1, startup_settings.rc_logistic_slots_count do
+						local name
+						local count
+						if chest.entity.name == g_names.requester_chest_1_1 .. "-s" then -- requester storage chest
+							if i > 1 then goto next end
+							name = chest.entity.get_filter(i)
+							if name == nil then goto next end
+							count = 1 * game.item_prototypes[name].stack_size --TODO make configurable
+						else
+							local request_slot = chest.entity.get_request_slot(i)
+							if request_slot == nil then goto next end
+							name = request_slot.name
+							count = request_slot.count
+						end
 
-                    for i = 1, startup_settings.rc_logistic_slots_count do
-                        local request_slot = chest.entity.get_request_slot(i)
-                        if request_slot ~= nil then
-                            local name = request_slot.name
-                            local count = request_slot.count
+						-- stock.get_item(name)
+						local item = global.items_stock.items[name]
+						-- if item == nil then
+						--     item = ITEM:add(name)  --- do not add signals requested
+						-- end
 
-                            -- stock.get_item(name)
-                            local item = global.items_stock.items[name]
-                            -- if item == nil then
-                            --     item = ITEM:add(name)  --- do not add signals requested
-                            -- end
-                            if item ~= nil then
-                                -- calc shortage
-                                count = count - inventory.get_item_count(name)
-                                -- enough stock?
-                                count = math_min(count, item.stock)
-                                -- enough energy?
-                                count = math_min(count, math_floor(eei.energy / power_consumption))
+						if item == nil then goto next end
+						-- calc shortage
+						count = count - inventory.get_item_count(name)
+						-- enough stock?
+						count = math_min(count, item.stock)
+						-- enough energy?
+						count = math_min(count, math_floor(eei.energy / power_consumption))
 
-                                if count > 0 then
-                                    crc_item_stack.name = name
-                                    crc_item_stack.count = count
-                                    -- in case the inventory is full
-                                    local inserted_count = inventory.insert(crc_item_stack)
-                                    item.stock = item.stock - inserted_count
-                                    eei.energy = eei.energy - inserted_count * power_consumption
-                                    LC:update_lc_signal(item, name)
+						if count <= 0 then goto next end
+						crc_item_stack.name = name
+						crc_item_stack.count = count
+						-- in case the inventory is full
+						local inserted_count = inventory.insert(crc_item_stack)
+						item.stock = item.stock - inserted_count
+						eei.energy = eei.energy - inserted_count * power_consumption
+						LC:update_lc_signal(item, name)
 
-                                    if eei.energy < power_consumption then
-                                        break
-                                    end
-                                end
-                            end
-                        end
-                    end
+						if eei.energy < power_consumption then break end
+						::next::
+					end
                 end
             else
                 CHEST:remove_rc(index)

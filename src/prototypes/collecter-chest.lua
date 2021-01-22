@@ -1,4 +1,5 @@
 require('config')
+local dataTools = require "dataTools"
 
 local function make_prototype(name, icon, inventory_size, max_health, width, height, picture, ingredients)
     local h_width = width / 2
@@ -96,14 +97,18 @@ if true then
 	item.name = g_names.collecter_chest_1_1.."-pp"
 	item.icon = LC_PATH .. '/graphics/icons/logistic-chest-passive-provider.png'
 	item.place_result = g_names.collecter_chest_1_1.."-pp"
+	item.order = "l[a]"
+	item.subgroup="logistics"
 	recipe.name = g_names.collecter_chest_1_1.."-pp"
 	recipe.result = g_names.collecter_chest_1_1.."-pp"
 	entity.name = g_names.collecter_chest_1_1.."-pp"
 	entity.animation.layers[1].filename=LC_PATH .. '/graphics/entity/hr-logistic-chest-passive-provider.png'
 	entity.animation.layers[1].hr_version.filename=LC_PATH .. '/graphics/entity/hr-logistic-chest-passive-provider.png'
 	entity.minable.result = g_names.collecter_chest_1_1.."-pp"
+	entity.order = "z-l[a]"
 
 	data:extend({entity,item,recipe})
+	dataTools.technology.addEffect("logistic-robotics", {type  = "unlock-recipe", recipe = recipe.name})
 end
 
 if true then
@@ -114,15 +119,21 @@ if true then
 	item.name = g_names.collecter_chest_1_1.."-s"
 	item.icon = LC_PATH .. '/graphics/icons/logistic-chest-storage.png'
 	item.place_result = g_names.collecter_chest_1_1.."-s"
+	item.order = "l[a]"
+	item.subgroup="logistics"
 	recipe.name = g_names.collecter_chest_1_1.."-s"
 	recipe.result = g_names.collecter_chest_1_1.."-s"
 	entity.name = g_names.collecter_chest_1_1.."-s"
 	entity.animation.layers[1].filename=LC_PATH .. '/graphics/entity/hr-logistic-chest-storage.png'
 	entity.animation.layers[1].hr_version.filename=LC_PATH .. '/graphics/entity/hr-logistic-chest-storage.png'
 	entity.minable.result = g_names.collecter_chest_1_1.."-s"
+	entity.order = "z-l[a]"
 
 	data:extend({entity,item,recipe})
+	dataTools.technology.addEffect("logistic-robotics", {type  = "unlock-recipe", recipe = recipe.name})
 end
+
+-- logistic-system: active provider, requester, buffer
 
 
 --[[

@@ -1,4 +1,6 @@
 require('config')
+local dataTools = require "dataTools"
+
 ---[[
 data:extend(
     {
@@ -94,3 +96,29 @@ local item   = table.deepcopy(data.raw.item["steel-chest"])
 data:extend({entity,item,recipe})
 --print(entity.type.."."..entity.name .. " = \n"..serpent.block(entity))
 --]]--
+
+if true then
+	-- KUX MODIFICATION additional provider chest working also as storage for bots
+	local name = g_names.requester_chest_1_1 .. "-s"
+	local entity = table.deepcopy(data.raw["logistic-container"]["logistic-chest-storage"])
+	local recipe = table.deepcopy(data.raw.recipe["logistic-chest-storage"])
+	local item   = table.deepcopy(data.raw.item["logistic-chest-storage"])
+	item.name = name
+	item.icon = LC_PATH .. '/graphics/icons/logistic-chest-storage-lr.png'
+	item.place_result = name
+	item.order = "l[a]"
+	item.subgroup="logistics"
+	recipe.name = name
+	recipe.result = name
+	entity.name = name
+	entity.animation.layers[1].filename=LC_PATH .. '/graphics/entity/logistic-chest-storage-lr.png'
+	entity.animation.layers[1].hr_version.filename=LC_PATH .. '/graphics/entity/hr-logistic-chest-storage-lr.png'
+	entity.minable.result = name
+	entity.order = "z-l[a]"
+
+	data:extend({entity,item,recipe})
+	dataTools.technology.addEffect("logistic-robotics", {type  = "unlock-recipe", recipe = recipe.name})
+end
+
+
+

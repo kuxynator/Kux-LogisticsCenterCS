@@ -25,7 +25,8 @@ function on_built(event)
     elseif name == names.requester_chest_1_1 or
         -- name == names.requester_chest_3_6 or
 		-- name == names.requester_chest_6_3
-		name == names.requester_chest_1_1.."b" --TODO KUX
+		name == names.requester_chest_1_1.."b" or --TODO KUX
+		name == names.requester_chest_1_1.."-s"
 	then
         CHEST:add_rc(entity)
     elseif name == names.logistics_center then

@@ -141,6 +141,10 @@ function add_lc_rc_count()
             for k1, v in pairs(rcs) do
                 re_scan_add_rc(v)
 			end
+			local rcss = surface.find_entities_filtered {name = names.requester_chest_1_1.."-s"} --TODO KUX
+            for k1, v in pairs(rcss) do
+                re_scan_add_rc(v)
+			end
 			
             total_rcs = total_rcs + #rcs + #rcsb
         end
