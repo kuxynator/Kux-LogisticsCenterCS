@@ -102,7 +102,7 @@ if true then
 	recipe.name = g_names.collecter_chest_1_1.."-pp"
 	recipe.result = g_names.collecter_chest_1_1.."-pp"
 	entity.name = g_names.collecter_chest_1_1.."-pp"
-	entity.animation.layers[1].filename=LC_PATH .. '/graphics/entity/hr-logistic-chest-passive-provider.png'
+	entity.animation.layers[1].filename=LC_PATH .. '/graphics/entity/logistic-chest-passive-provider.png'
 	entity.animation.layers[1].hr_version.filename=LC_PATH .. '/graphics/entity/hr-logistic-chest-passive-provider.png'
 	entity.minable.result = g_names.collecter_chest_1_1.."-pp"
 	entity.order = "z-l[a]"
@@ -124,7 +124,7 @@ if true then
 	recipe.name = g_names.collecter_chest_1_1.."-s"
 	recipe.result = g_names.collecter_chest_1_1.."-s"
 	entity.name = g_names.collecter_chest_1_1.."-s"
-	entity.animation.layers[1].filename=LC_PATH .. '/graphics/entity/hr-logistic-chest-storage.png'
+	entity.animation.layers[1].filename=LC_PATH .. '/graphics/entity/logistic-chest-storage.png'
 	entity.animation.layers[1].hr_version.filename=LC_PATH .. '/graphics/entity/hr-logistic-chest-storage.png'
 	entity.minable.result = g_names.collecter_chest_1_1.."-s"
 	entity.order = "z-l[a]"
