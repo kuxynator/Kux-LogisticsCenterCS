@@ -29,9 +29,9 @@ function check_rcs_on_nth_tick(nth_tick_event)
         if chest ~= nil then
             if chest.entity.valid then
                 if chest.nearest_lc ~= nil then
-                    local eei = chest.nearest_lc.eei
+					local eei = chest.nearest_lc.eei					
                     local power_consumption = chest.nearest_lc.power_consumption
-					local inventory = chest.entity.get_output_inventory()					
+					local inventory = chest.entity.get_output_inventory()
 					
 					for i = 1, startup_settings.rc_logistic_slots_count do
 						local name
@@ -53,14 +53,14 @@ function check_rcs_on_nth_tick(nth_tick_event)
 						-- if item == nil then
 						--     item = ITEM:add(name)  --- do not add signals requested
 						-- end
-
+						
 						if item == nil then goto next end
 						-- calc shortage
 						count = count - inventory.get_item_count(name)
 						-- enough stock?
 						count = math_min(count, item.stock)
 						-- enough energy?
-						count = math_min(count, math_floor(eei.energy / power_consumption))
+						count = math_min(count, math_floor(eei.energy / power_consumption)) 
 
 						if count <= 0 then goto next end
 						crc_item_stack.name = name

@@ -1,4 +1,5 @@
 if script.active_mods["gvv"] then require("__gvv__.gvv")() end
+local mod = require("mod")
 
 require('config')
 require('logistics_center.init_globals')
@@ -109,3 +110,4 @@ script.on_event(defines.events.on_player_created, on_player_created)
 
 -- on research finished
 script.on_event(defines.events.on_research_finished, on_research_finished)
+

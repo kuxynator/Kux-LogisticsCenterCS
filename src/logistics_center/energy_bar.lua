@@ -21,7 +21,7 @@ end
 local function energy_bar_check_on_nth_tick(tick)
     local bar_max = 13.0
     local g_ebs = global.energy_bar_entities.entities
-    for k, v in pairs(g_ebs) do
+	for k, v in pairs(g_ebs) do
         local bar_index = math_ceil(bar_max * v.eei.energy / (startup_settings.lc_buffer_capacity * 1000000))
         if bar_index > bar_max then
             bar_index = bar_max

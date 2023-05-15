@@ -1,18 +1,19 @@
 {
-    "name": "Kux-LogisticsCenterCS",
-    "version": "2.1.1",
-    "title": "Crash-Site Logistics Center",
-    "author": "kuxynator",
-    "homepage": "",
-    "contact": "",
-    "description": "A logistics center was recovered from the crashed space ship. It could be modified to help you build your base.",
-    "factorio_version": "1.1",
-    "dependencies": [
-		"base",
-		"? Krastorio2",
-		"? space-exploration",
-		"! ab_logisticscenter",
-		"? ab_loaderunlock",
-		"! AEAA593E-CC01-490C-BFB5-DE8E5023B5A6"
-    ]
+  "name": "Kux-LogisticsCenterCS",
+  "version": "2.3.1",
+  "title": "Crash-Site Logistics Center",
+  "author": "kuxynator",
+  "homepage": "",
+  "contact": "",
+  "description": "A logistics center was recovered from the crashed space ship. It has been adapted to help to build your base.",
+  "factorio_version": "1.1",
+  "dependencies": [
+    "base",
+    "Kux-CoreLib >= 2.4.1",
+    "? Krastorio2",
+    "? space-exploration",
+    "! ab_logisticscenter",
+    "? ab_loaderunlock",
+    "! AEAA593E-CC01-490C-BFB5-DE8E5023B5A6"
+  ]
 }

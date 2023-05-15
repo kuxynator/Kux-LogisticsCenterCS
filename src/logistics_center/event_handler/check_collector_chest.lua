@@ -29,7 +29,7 @@ function check_ccs_on_nth_tick_all(nth_tick_event)
                 if chest.nearest_lc ~= nil then
                     local inventory = chest.entity.get_output_inventory()
                     if not inventory.is_empty() then
-                        local eei = chest.nearest_lc.eei
+						local eei = chest.nearest_lc.eei --> LuaEntity name="ab-lc-electric-energy-interface"
                         local power_consumption = chest.nearest_lc.power_consumption
                         local contents = inventory.get_contents()
 
@@ -38,8 +38,8 @@ function check_ccs_on_nth_tick_all(nth_tick_event)
                             local item = global.items_stock.items[name]
                             if item == nil then
                                 item = ITEM:add(name)
-                            end
-
+							end
+							
                             -- enough energy?
                             count = math_min(count, math_floor(eei.energy / power_consumption))
                             -- calc max_control
@@ -56,14 +56,16 @@ function check_ccs_on_nth_tick_all(nth_tick_event)
                                 if eei.energy < power_consumption then
                                     break
                                 end
-                            end
+							end
+							::next2::
                         end
                     end
                 end
             else
                 CHEST:remove_cc(index)
             end
-        end
+		end
+		::next::
     end
 
     -- calc checked_index

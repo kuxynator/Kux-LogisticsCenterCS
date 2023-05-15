@@ -1,4 +1,25 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 2023-05-15
+    Changes:
+      - add mod.lua
+      - add Kux-CoreLib dependency
+---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+Date: 2021-01-21
+  Changes:
+    - better method for fill spaceship inventory
+  Bugfixes:
+    - Fix for autplaced logistics center not working
+    - No fix for LuaEntity not valid. > can not be reproduced
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2021-01-21
+  Changes:
+    - place logistics center on map
+    - fill spaceship inventory
+    - adapt logistcs center color
+---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: 2021-01-17
   Bugfixes:
@@ -22,5 +43,3 @@ Date: 2021-01-01
 Version: 0.0.0
   Info:
     - cloned from https://mods.factorio.com/mod/ab_logisticscenter
-
-

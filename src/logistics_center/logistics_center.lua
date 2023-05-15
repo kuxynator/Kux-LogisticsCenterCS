@@ -26,7 +26,7 @@ end
 -- Check animation on nth-tick
 local function check_animation(tick)
     local lcs = global.lc_entities
-    for k, v in pairs(lcs.entities) do
+	for k, v in pairs(lcs.entities) do
         if v.eei.energy == 0 then
             if v.animation ~= nil then
                 v.animation.destroy()

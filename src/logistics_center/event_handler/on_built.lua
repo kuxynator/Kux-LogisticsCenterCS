@@ -6,7 +6,8 @@ local LCC = require('logistics_center.logistics_center_controller')
 local names = g_names
 
 function on_built(event)
-    local entity = event.created_entity
+	local entity = event.created_entity
+	print("on_built "..entity.name)
     
     -- incrase a nil value by script_raised_built by other mods
     if entity == nil then return end
