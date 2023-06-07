@@ -8,11 +8,11 @@ require('logistics_center.updates.19-add_lc_rc_count')
 -- call only in script.on_configuration_changed()
 function global_data_migrations()
     if global.global_data_version ~= nil then -- and global.global_data_version ~= g_config.global_data_version then
-        game.print('ab_logisticscenter: global_data_version: ' .. global.global_data_version)
-        if global_data_version == g_config.global_data_version then
+        if global.global_data_version == g_config.global_data_version then
             return
         end
     end
+    game.print('ab_logisticscenter: global_data_version: ' .. global.global_data_version.." -> "..g_config.global_data_version)
 
     -- nil - 16
     update()
@@ -25,6 +25,19 @@ function global_data_migrations()
 
     -- 19
     add_lc_rc_count()
+
+
+    -- 20
+    -- move runtime_vars
+
+    if global.global_data_version == nil or global.global_data_version < 20 then
+        if(global.cc_entities.checked_index==nil) then global.cc_entities.checked_index = 0 end
+        if(global.rc_entities.checked_index==nil) then global.rc_entities.checked_index = 0 end
+
+        global.global_data_version = 20
+    end
+    
+
 
     -- global.global_data_version = g_config.global_data_version
 end

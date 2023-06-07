@@ -1,4 +1,3 @@
-require('config')
 
 function on_player_created(event)
     local player = game.players[event.player_index]

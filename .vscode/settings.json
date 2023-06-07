@@ -6,6 +6,15 @@
 		"script",
 		"data",
 		"defines",
-		"remote"
+		"remote",
+		"__Profiler"
+	],
+	"Lua.runtime.plugin": "D:/Develop/Factorio/workspaceStorage/shared/justarandomgeek.factoriomod-debug/sumneko-3rd/factorio/plugin.lua",
+	"Lua.workspace.library": [
+		"..\\Kux-CoreLib\\src\\lib",
+		"..\\Factorio\\meta",
+		"D:\\Develop\\Factorio\\workspaceStorage\\shared\\justarandomgeek.factoriomod-debug\\sumneko-3rd\\factorio\\library",
+		"e:\\Program Files\\Factorio\\1.1\\data",
+		"D:/Develop/Factorio/workspaceStorage/shared/justarandomgeek.factoriomod-debug/sumneko-3rd/factorio/library"
 	]
 }

@@ -1,11 +1,13 @@
-ITEM = require('item')
+---@class LogisticsCenterController
+LogisticsCenterController = {}
 
-LCC = {}
+---@deprecated
+LCC=LogisticsCenter
 
 local math_min = math.min
 
 -- Update signals of lc controller
-function LCC:update_signals()
+function LogisticsCenterController.update_signals()
     if global.lcc_entity.parameters == nil then
         return
     end
@@ -17,7 +19,7 @@ function LCC:update_signals()
         if v.signal.type == 'item' and v.signal.name ~= nil then
             item1 = global.items_stock.items[v.signal.name]
             if item1 == nil and v.count ~= -1 then
-                item1 = ITEM:add(v.signal.name)
+                item1 = Items.add(v.signal.name)
             end
 
             if item1 ~= nil then
@@ -37,7 +39,7 @@ function LCC:update_signals()
                     item1.max_control = global.technologies.lc_capacity
                 elseif v.count == -1 then -- delete item if item stock is zero
                     if item1.stock == 0 then
-                        ITEM:remove(v.signal.name)
+                        Items.remove(v.signal.name)
                     end
                 else -- set limit and change the signal place
                     item1.max_control = math_min(v.count, global.technologies.lc_capacity)
@@ -48,7 +50,7 @@ function LCC:update_signals()
 end
 
 -- Add to watch-list
-function LCC:add(entity)
+function LogisticsCenterController.add(entity)
     local lcc_s = global.lcc_entity
 
     -- caution: loop with big_number
@@ -61,7 +63,7 @@ function LCC:add(entity)
 
                 -- update lc controller
                 if lcc_s.count == 0 then
-                    LCC:update_signals()
+                    LogisticsCenterController.update_signals()
                 end
             end
 
@@ -73,7 +75,7 @@ function LCC:add(entity)
 end
 
 -- Remove from watch list
-function LCC:remove(entity)
+function LogisticsCenterController.remove(entity)
     local lcc_s = global.lcc_entity
 
     -- caution: loop with big_number
@@ -95,7 +97,7 @@ end
 
 -- Update lcc
 -- Call on lcc gui closed
-function LCC:update(entity)
+function LogisticsCenterController.update(entity)
     local control_behavior = entity.get_or_create_control_behavior()
     if control_behavior.enabled == false then
         control_behavior.parameters = nil
@@ -119,8 +121,8 @@ function LCC:update(entity)
     lcc_s.parameters = parameters
 
     -- update lc controller signals
-    LCC:update_signals()
-    LC:update_all_lc_signals()
+    LogisticsCenterController.update_signals()
+    LogisticsCenter.update_all_lc_signals()
 end
 
-return LCC
+return LogisticsCenterController

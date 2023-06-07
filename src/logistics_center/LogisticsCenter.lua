@@ -1,12 +1,9 @@
-require('helper')
-require('config')
-local CHEST = require('chest')
-local EB = require('energy_bar')
 
--- logistics center
-LC = {}
+---@class LogisticsCenter
+LogisticsCenter = {}
 
-local math_ceil = math.ceil
+---@deprecated
+LC=LogisticsCenter
 
 local names = g_names
 local config = g_config
@@ -46,18 +43,18 @@ local function check_animation(tick)
     end
 end
 
-function LC:register_check_animation_handler()
+function LogisticsCenter.register_check_animation_handler()
     local rg_lc_animation = settings.global[names.lc_animation].value
     if rg_lc_animation == true then
         script.on_nth_tick(check_on_nth_tick, check_animation)
     end
 end
 
-function LC:un_register_check_animation_handler()
+function LogisticsCenter.un_register_check_animation_handler()
     script.on_nth_tick(check_on_nth_tick, nil)
 end
 
-function LC:re_register_check_animation_handler()
+function LogisticsCenter.re_register_check_animation_handler()
     local rg_lc_animation = settings.global[names.lc_animation].value
     if rg_lc_animation == true then
         if global.lc_entities.count >= 1 then
@@ -66,10 +63,10 @@ function LC:re_register_check_animation_handler()
     end
 end
 
-function LC:on_lc_animation_setting_changed()
+function LogisticsCenter.on_lc_animation_setting_changed()
     local rg_lc_animation = settings.global[names.lc_animation].value
     if rg_lc_animation == true then
-        LC:re_register_check_animation_handler()
+        LogisticsCenter.re_register_check_animation_handler()
     else
         for k, v in pairs(global.lc_entities.entities) do
             if v.animation ~= nil then
@@ -77,7 +74,7 @@ function LC:on_lc_animation_setting_changed()
                 v.animation = nil
             end
         end
-        LC:un_register_check_animation_handler()
+        LogisticsCenter.un_register_check_animation_handler()
     end
 end
 
@@ -102,7 +99,7 @@ local function pack_signals()
 end
 
 -- Add to watch-list
-function LC:add(entity)
+function LogisticsCenter.add(entity)
     local lcs = global.lc_entities
 
     local p_str = surface_and_position_to_string(entity)
@@ -161,8 +158,8 @@ function LC:add(entity)
 
     -- add energy bar for the first logistics center
     if lcs.count == 1 then
-        EB:add(pack)
-        LC:register_check_animation_handler()
+        EnergyBar.add(pack)
+        LogisticsCenter.register_check_animation_handler()
     end
 
     -- pack.animation.active = false
@@ -172,11 +169,11 @@ function LC:add(entity)
     -- game.print('on-built:' .. p_str)
 
     -- recalc distance
-    LC:recalc_distance_when_add_lc(entity, pack.eei)
+    LogisticsCenter.recalc_distance_when_add_lc(entity, pack.eei)
 end
 
 -- Remove from watch list
-function LC:remove(entity)
+function LogisticsCenter.remove(entity)
     local lcs = global.lc_entities
 
     local p_str = surface_and_position_to_string(entity)
@@ -207,14 +204,14 @@ function LC:remove(entity)
     local old_eei = pack.eei
 
     -- destroy the energy bar
-    EB:remove(pack)
+    EnergyBar.remove(pack)
 
     -- should remove lc first and then recalc distance, destroy eei last
 
     lcs.entities[p_str] = nil
 
     -- recalc distance
-    LC:recalc_distance_when_remove_lc(entity, old_eei)
+    LogisticsCenter.recalc_distance_when_remove_lc(entity, old_eei)
 
     -- destroy the electric energy interface and animation
     pack.eei.destroy()
@@ -223,26 +220,26 @@ function LC:remove(entity)
     end
 
     if lcs.count == 0 then
-        LC:un_register_check_animation_handler()
+        LogisticsCenter.un_register_check_animation_handler()
     end
 end
 
 -- Call on lc rotated
-function LC:create_energy_bar(entity)
+function LogisticsCenter.create_energy_bar(entity)
     -- Create or destroy energy bar for the rotated logistics center
 
     local p_str = surface_and_position_to_string(entity)
     local pack = global.lc_entities.entities[p_str]
 
     if pack.energy_bar_index == nil then
-        EB:add(pack)
+        EnergyBar.add(pack)
     else
-        EB:remove(pack)
+        EnergyBar.remove(pack)
     end
 end
 
 -- Update single lc signal
-function LC:update_lc_signal(item, item_name)
+function LogisticsCenter.update_lc_signal(item, item_name)
     -- pack the signal
     local signal = nil
     -- local item = global.items_stock.items[item_name]
@@ -261,7 +258,7 @@ function LC:update_lc_signal(item, item_name)
 end
 
 -- Update all signals of one lc
-function LC:update_lc_signals(entity)
+function LogisticsCenter.update_lc_signals(entity)
 	local control_behavior = entity.get_or_create_control_behavior()
     if control_behavior.enabled then
         control_behavior.parameters = pack_signals()
@@ -271,7 +268,7 @@ function LC:update_lc_signals(entity)
 end
 
 -- Update signals of all lcs
-function LC:update_all_lc_signals()
+function LogisticsCenter.update_all_lc_signals()
     -- TODO if item.index > startup_settings.lc_item_slot_count
     -- set the signals to the lc(s) which control_behavior are enabled
     local parameters = pack_signals()
@@ -285,23 +282,23 @@ function LC:update_all_lc_signals()
     end
 end
 
-function LC:recalc_distance_when_power_consumption_changed()
+function LogisticsCenter.recalc_distance_when_power_consumption_changed()
     -- recalc cc
-    for index, v in pairs(global.cc_entities.entities) do
+    for _, v in pairs(global.cc_entities.entities) do
         if v.entity.valid and v.nearest_lc ~= nil then
-            v.nearest_lc = CHEST:calc_power_consumption(calc_distance_between_two_points(v.entity.position, v.nearest_lc.eei.position), v.nearest_lc.eei, 1)
+            v.nearest_lc = Chests.getConnection(calc_distance_between_two_points(v.entity.position, v.nearest_lc.eei.position), v.nearest_lc.eei, 1)
         end
     end
 
     -- recalc rc
-    for index, v in pairs(global.rc_entities.entities) do
+    for _, v in pairs(global.rc_entities.entities) do
         if v.entity.valid and v.nearest_lc ~= nil then
-            v.nearest_lc = CHEST:calc_power_consumption(calc_distance_between_two_points(v.entity.position, v.nearest_lc.eei.position), v.nearest_lc.eei, 2)
+            v.nearest_lc = Chests.getConnection(calc_distance_between_two_points(v.entity.position, v.nearest_lc.eei.position), v.nearest_lc.eei, 2)
         end
     end
 end
 
-function LC:recalc_distance_when_add_lc(entity, eei)
+function LogisticsCenter.recalc_distance_when_add_lc(entity, eei)
     local old_dis
     local new_dis
 
@@ -310,16 +307,16 @@ function LC:recalc_distance_when_add_lc(entity, eei)
         if v.entity.valid then
             -- v.nearest_lc = CHEST:find_nearest_lc(v.entity, 1)
             if v.nearest_lc == nil then
-                v.nearest_lc = CHEST:find_nearest_lc(v.entity, 1)
+                v.nearest_lc = Chests.find_nearest_lc(v.entity, 1)
             else
                 old_dis = calc_distance_between_two_points(v.entity.position, v.nearest_lc.eei.position)
                 new_dis = calc_distance_between_two_points(v.entity.position, entity.position)
                 if new_dis <= old_dis then
-                    v.nearest_lc = CHEST:calc_power_consumption(new_dis, eei, 1)
+                    v.nearest_lc = Chests.getConnection(new_dis, eei, 1)
                 end
             end
         else
-            CHEST:remove_cc(index)
+            Chests.remove_cc(index)
         end
     end
 
@@ -328,31 +325,31 @@ function LC:recalc_distance_when_add_lc(entity, eei)
         if v.entity.valid then
             -- v.nearest_lc = CHEST:find_nearest_lc(v.entity, 2)
             if v.nearest_lc == nil then
-                v.nearest_lc = CHEST:find_nearest_lc(v.entity, 2)
+                v.nearest_lc = Chests.find_nearest_lc(v.entity, 2)
             else
                 old_dis = calc_distance_between_two_points(v.entity.position, v.nearest_lc.eei.position)
                 new_dis = calc_distance_between_two_points(v.entity.position, entity.position)
                 if new_dis <= old_dis then
-                    v.nearest_lc = CHEST:calc_power_consumption(new_dis, eei, 2)
+                    v.nearest_lc = Chests.getConnection(new_dis, eei, 2)
                 end
             end
         else
-            CHEST:remove_cc(index)
+            Chests.remove_cc(index)
         end
     end
 
-    LC:recalc_distance_when_power_consumption_changed()
+    LogisticsCenter.recalc_distance_when_power_consumption_changed()
 end
 
-function LC:recalc_distance_when_remove_lc(entity, eei)
+function LogisticsCenter.recalc_distance_when_remove_lc(entity, eei)
     -- recalc cc
     for index, v in pairs(global.cc_entities.entities) do
         if v.entity.valid then
             if v.nearest_lc ~= nil and v.nearest_lc.eei == eei then
-                v.nearest_lc = CHEST:find_nearest_lc(v.entity, 1)
+                v.nearest_lc = Chests.find_nearest_lc(v.entity, 1)
             end
         else
-            CHEST:remove_cc(index)
+            Chests.remove_cc(index)
         end
     end
 
@@ -360,14 +357,14 @@ function LC:recalc_distance_when_remove_lc(entity, eei)
     for index, v in pairs(global.rc_entities.entities) do
         if v.entity.valid then
             if v.nearest_lc ~= nil and v.nearest_lc.eei == eei then
-                v.nearest_lc = CHEST:find_nearest_lc(v.entity, 2)
+                v.nearest_lc = Chests.find_nearest_lc(v.entity, 2)
             end
         else
-            CHEST:remove_rc(index)
+            Chests.remove_rc(index)
         end
     end
 
-    LC:recalc_distance_when_power_consumption_changed()
+    LogisticsCenter.recalc_distance_when_power_consumption_changed()
 end
 
-return LC
+return LogisticsCenter

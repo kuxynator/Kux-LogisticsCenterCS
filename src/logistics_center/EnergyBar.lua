@@ -1,7 +1,7 @@
 require('config')
 
--- energy bar
-EB = {}
+---@class EnergyBar
+EnergyBar = {}
 
 local names = g_names
 local config = g_config
@@ -38,7 +38,7 @@ local function energy_bar_check_on_nth_tick(tick)
     end
 end
 
-function EB:re_register_handler()
+function EnergyBar.re_register_handler()
     -- Re-register conditional handler
     if global.energy_bar_entities ~= nil and global.energy_bar_entities.count >= 1 then
         script.on_nth_tick(check_on_nth_tick, energy_bar_check_on_nth_tick)
@@ -46,7 +46,7 @@ function EB:re_register_handler()
 end
 
 -- Create energy bar for the logistics center
-function EB:add(lc_pack)
+function EnergyBar.add(lc_pack)
     local bar_max = 13.0
     local bar_index = math_ceil(bar_max * lc_pack.eei.energy / (startup_settings.lc_buffer_capacity * 1000000))
     if bar_index > bar_max then
@@ -81,7 +81,7 @@ function EB:add(lc_pack)
 end
 
 -- Destroy energy bar for the logistics center
-function EB:remove(lc_pack)
+function EnergyBar.remove(lc_pack)
     if lc_pack.energy_bar_index ~= nil then
         local g_ebs = global.energy_bar_entities.entities
         g_ebs[lc_pack.energy_bar_index].energy_bar.destroy()
@@ -96,4 +96,4 @@ function EB:remove(lc_pack)
     end
 end
 
-return EB
+return EnergyBar

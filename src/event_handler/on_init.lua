@@ -1,5 +1,3 @@
-require('config')
-local LC = require('logistics_center.logistics_center')
 
 local names = g_names
 local startup_settings = g_startup_settings
@@ -26,7 +24,7 @@ local placeLogisticsCenter = function ()
 		force = game.forces["player"],
 		--raise_built=true
 	}
-	LC:add(entity) -- WORKAROUND for on_build is not called
+	LogisticsCenter.add(entity) -- WORKAROUND for on_build is not called
 end
 
 local setSpaceshipInventory = function ()

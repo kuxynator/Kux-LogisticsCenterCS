@@ -162,8 +162,8 @@ function add_lc_rc_count()
         global.rc_entities.count = total_rcs
 
         -- recalc cpr
-        global.runtime_vars.cc_check_per_round = math_ceil(total_ccs * startup_settings.check_cc_percentages)
-        global.runtime_vars.rc_check_per_round = math_ceil(total_rcs * startup_settings.check_rc_percentages)
+        global.cc_entities.check_per_round = math_ceil(total_ccs * startup_settings.check_cc_percentages)
+        global.rc_entities.check_per_round = math_ceil(total_rcs * startup_settings.check_rc_percentages)
 
         -- set global_data_version
         global.global_data_version = v

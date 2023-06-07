@@ -1,12 +1,6 @@
 {
     "technology": [
-        [
-            "ab-lc-tech-lc-capacity-1",
-            "ab-lc-tech-lc-capacity-0"
-        ],
-        [
-            "ab-lc-tech-power-consumption-1",
-            "ab-lc-tech-power-consumption-0"
-        ]
+        ["ab-lc-tech-lc-capacity-1", "ab-lc-tech-lc-capacity-0"],
+        ["ab-lc-tech-power-consumption-1","ab-lc-tech-power-consumption-0"]
     ]
 }

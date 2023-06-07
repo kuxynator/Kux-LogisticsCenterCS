@@ -1,5 +1,3 @@
-require('config')
-
 local config = g_config
 local startup_settings = g_startup_settings
 
@@ -27,6 +25,8 @@ function init_globals()
             entities = {}
         }
 
+   
+    ---@type ChestStorage
     -- {index, empty_stack, entities = {[index] = {entity, nearest_lc = {power_consumption, eei}}}}
     global.cc_entities =
         global.cc_entities or
@@ -34,9 +34,13 @@ function init_globals()
             index = 1,
             empty_stack = {count = 0, data = {}},
             entities = {},
-            count = 0
+            count = 0,
+            checked_index = 0,
+            --TODO
         }
 
+    
+    ---@type ChestStorage
     -- {index, empty_stack, entities = {[index] = {entity, nearest_lc = {power_consumption, eei}}}}
     global.rc_entities =
         global.rc_entities or
@@ -44,7 +48,9 @@ function init_globals()
             index = 1,
             empty_stack = {count = 0, data = {}},
             entities = {},
-            count = 0
+            count = 0,
+            checked_index = 0
+            --TODO
         }
 
     -- {count, parameters, entities = {[index] = entity}
@@ -73,14 +79,5 @@ function init_globals()
             power_consumption_percentage = 1
             -- tech_lc_capacity_real_level = 0,
             -- tech_power_consumption_real_level = 0
-        }
-
-    global.runtime_vars =
-        global.runtime_vars or
-        {
-            cc_check_per_round = 0,
-            cc_checked_index = 0,
-            rc_check_per_round = 0,
-            rc_checked_index = 0
         }
 end

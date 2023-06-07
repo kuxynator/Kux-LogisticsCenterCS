@@ -1,42 +1,32 @@
 if script.active_mods["gvv"] then require("__gvv__.gvv")() end
-local mod = require("mod")
+require("mod")
 
 require('config')
+
+require('logistics_center.helper')
 require('logistics_center.init_globals')
+require('logistics_center.Chests')
+require('logistics_center.Items')
+require('logistics_center.LogisticsCenter')
+require('logistics_center.LogisticsCenterController')
+require('logistics_center.EnergyBar')
+require('logistics_center.updates')
+require('logistics_center.Technology')
 
-require('logistics_center.event_handler.check_collector_chest')
--- require('logistics_center.event_handler.check_player_request')
-require('logistics_center.event_handler.check_requester_chest')
-
-require('logistics_center.event_handler.on_built')
-require('logistics_center.event_handler.on_configuration_changed')
-require('logistics_center.event_handler.on_gui_closed')
-require('logistics_center.event_handler.on_gui_opened')
-require('logistics_center.event_handler.on_load')
-require('logistics_center.event_handler.on_destroy')
-require('logistics_center.event_handler.on_player_created')
-require('logistics_center.event_handler.on_init')
-require('logistics_center.event_handler.on_research_finished')
-require('logistics_center.event_handler.on_rotated')
-require('logistics_center.event_handler.on_runtime_mod_setting_changed')
-
-local check_ccs_on_nth_tick_all = check_ccs_on_nth_tick_all
-local check_ccs_on_nth_tick_ores_only = check_ccs_on_nth_tick_ores_only
-local check_ccs_on_nth_tick_except_ores = check_ccs_on_nth_tick_except_ores
--- local check_player_request = check_player_request
-local check_rcs_on_nth_tick = check_rcs_on_nth_tick
-
-local on_built = on_built
-local on_configuration_changed = on_configuration_changed
-local on_gui_closed = on_gui_closed
-local on_gui_opened = on_gui_opened
-local on_load = on_load
-local on_destroy = on_destroy
-local on_player_created = on_player_created
-local on_init = on_init
-local on_research_finished = on_research_finished
-local on_rotated = on_rotated
-local on_runtime_mod_setting_changed = on_runtime_mod_setting_changed
+require('event_handler.check_collector_chest')
+-- require('event_handler.check_player_request')
+require('event_handler.check_requester_chest')
+require('event_handler.on_built')
+require('event_handler.on_configuration_changed')
+require('event_handler.on_gui_closed')
+require('event_handler.on_gui_opened')
+require('event_handler.on_load')
+require('event_handler.on_destroy')
+require('event_handler.on_player_created')
+require('event_handler.on_init')
+require('event_handler.on_research_finished')
+require('event_handler.on_rotated')
+require('event_handler.on_runtime_mod_setting_changed')
 
 script.on_init(function ()
 	init_globals()
@@ -49,54 +39,46 @@ script.on_load(on_load)
 -- on configuration changed
 script.on_configuration_changed(on_configuration_changed)
 
--- on built
-script.on_event(
-    {
-        defines.events.on_built_entity,
-        defines.events.on_robot_built_entity
-    },
-    on_built
-)
-script.on_event(
-    {
-        defines.events.script_raised_built,
-        defines.events.script_raised_revive
-    },
-    function(event)
-        local transfer_event = {created_entity = event.entity}
-        on_built(transfer_event)
-    end
-)
+local item_filter = {
+    {filter="name", name=g_names.collecter_chest_1_1},
+    {filter="name", name=g_names.collecter_chest_1_1.."-pp"},
+    {filter="name", name=g_names.collecter_chest_1_1.."-s"},
 
--- on pre-mined-item/entity-died
-script.on_event(
-    {
-        defines.events.on_pre_player_mined_item, -- on_player_mined_entity
-        defines.events.on_robot_pre_mined,
-        defines.events.on_entity_died,
-        defines.events.script_raised_destroy -- seems duplicated with the above events
-    },
-    on_destroy
-)
+    {filter="name", name=g_names.requester_chest_1_1},
+    {filter="name", name=g_names.requester_chest_1_1.."b"},
+    {filter="name", name=g_names.requester_chest_1_1.."-s"},
+
+    {filter="name", name=g_names.logistics_center},
+    {filter="name", name=g_names.logistics_center_controller},
+}
+
+-- on built
+script.on_event(defines.events.on_built_entity,on_built,item_filter)
+script.on_event(defines.events.on_robot_built_entity,on_built,item_filter)
+script.on_event(defines.events.script_raised_built,on_built,item_filter)
+script.on_event(defines.events.script_raised_revive,on_built,item_filter)
 
 -- check all collector chests
-if g_startup_settings.item_type_limitation == nil or g_startup_settings.item_type_limitation == 'all' then
-    script.on_nth_tick(g_startup_settings.check_cc_on_nth_tick, check_ccs_on_nth_tick_all)
-elseif g_startup_settings.item_type_limitation == 'ores only' then
-    script.on_nth_tick(g_startup_settings.check_cc_on_nth_tick, check_ccs_on_nth_tick_ores_only)
-else
-    script.on_nth_tick(g_startup_settings.check_cc_on_nth_tick, check_ccs_on_nth_tick_except_ores)
+local check_ccs_on_nth_tick = check_ccs_on_nth_tick_all
+if g_startup_settings.item_type_limitation == 'ores only' then
+    check_ccs_on_nth_tick= check_ccs_on_nth_tick_ores_only
+elseif g_startup_settings.item_type_limitation == 'except ores' then
+    check_ccs_on_nth_tick = check_ccs_on_nth_tick_except_ores
 end
-
--- check all requester chests
-script.on_nth_tick(g_startup_settings.check_rc_on_nth_tick, check_rcs_on_nth_tick)
+if(g_startup_settings.check_cc_on_nth_tick == g_startup_settings.check_rc_on_nth_tick) then
+    script.on_nth_tick(g_startup_settings.check_cc_on_nth_tick, function (event)
+        check_ccs_on_nth_tick(event)
+        check_rcs_on_nth_tick(event)
+    end)
+else
+    script.on_nth_tick(g_startup_settings.check_cc_on_nth_tick, check_ccs_on_nth_tick)
+    script.on_nth_tick(g_startup_settings.check_rc_on_nth_tick, check_rcs_on_nth_tick)
+end
 
 script.on_event(defines.events.on_player_rotated_entity, on_rotated)
 
 -- on opened the logistics center
 script.on_event(defines.events.on_gui_opened, on_gui_opened)
-
--- on closed the `logistics center` and `logistics center controller`
 script.on_event(defines.events.on_gui_closed, on_gui_closed)
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, on_runtime_mod_setting_changed)

@@ -1,7 +1,4 @@
-local LC = require('logistics_center.logistics_center')
-local LCC = require('logistics_center.logistics_center_controller')
-
-TECH = {}
+Technology = {}
 
 local math_ceil = math.ceil
 local math_floor = math.floor
@@ -34,7 +31,7 @@ for i = 2, 5 do
     tech_power_consumption_decrement_sum[i] = tech_power_consumption_decrement_sum[i - 1] + config.tech_power_consumption_decrement[i - 1] * 10
 end
 
-function TECH:research_lc_capacity(research)
+function Technology.research_lc_capacity(research)
     local tech = global.technologies
 
     -- tech.tech_lc_capacity_real_level = tech.tech_lc_capacity_real_level + 1
@@ -65,15 +62,10 @@ function TECH:research_lc_capacity(research)
 
     LCC:update_signals()
 
-    game.print(
-        {
-            'ab-logisticscenter-text.print-after-tech-lc-capacity-researched',
-            tech.lc_capacity
-        }
-    )
+    game.print({'ab-logisticscenter-text.print-after-tech-lc-capacity-researched', tech.lc_capacity})
 end
 
-function TECH:research_chest_power_consumption(research)
+function Technology.research_chest_power_consumption(research)
     local tech = global.technologies
 
     -- tech.tech_power_consumption_real_level = tech.tech_power_consumption_real_level + 1
@@ -116,4 +108,4 @@ function TECH:research_chest_power_consumption(research)
     LC:recalc_distance_when_power_consumption_changed()
 end
 
-return TECH
+return Technology

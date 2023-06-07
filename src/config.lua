@@ -1,6 +1,7 @@
 local function get_config()
     return {
-        global_data_version = 19,
+        -- global_data_version = 19
+        global_data_version = 20, --2.4.0 [2023-06-05]
         -------------------------------------------------------------------------------------------
         -- TECHNOLOGIES
         -- increment of lc_capacity of each research, default = {19000, 30000, 50000, 100000}
@@ -25,6 +26,8 @@ local function get_config()
     }
 end
 
+--TODO rename collecter into collector and create migration
+
 local function get_names()
     return {
         -- ITEM/ENTITY NAMES
@@ -32,6 +35,7 @@ local function get_names()
         -- collecter_chest_3_6 = "ab-lc-collecter-chest-3_6",
         -- collecter_chest_6_3 = "ab-lc-collecter-chest-6_3",
         requester_chest_1_1 = 'ab-lc-requester-chest-1_1',
+        requester_storage_chest_1_1 = 'ab-lc-requester-chest-1_1-s',
         logistics_center = 'ab-lc-logistics-center',
         logistics_center_controller = 'ab-lc-logistics-center-controller',
         electric_energy_interface = 'ab-lc-electric-energy-interface',
@@ -45,8 +49,8 @@ local function get_names()
         distance_flying_text = 'distance-flying-text',
         -------------------------------------------------------------------------------------------
         -- MATCH PATTERN STRINGS
-        collecter_chest_pattern = 'ab%-lc%-collecter%-chest',
-        requester_chest_pattern = 'ab%-lc%-collecter%-chest',
+        collecter_chest_pattern = '^ab%-lc%-collecter%-chest',
+        requester_chest_pattern = '^ab%-lc%-requester%-chest',
         tech_lc_capacity_pattern = 'ab%-lc%-tech%-lc%-capacity',
         tech_power_consumption_pattern = 'ab%-lc%-tech%-power%-consumption',
         -------------------------------------------------------------------------------------------
@@ -107,7 +111,7 @@ local function get_startup_settings()
     return startup_settings
 end
 
-g_config = get_config()
-g_names = get_names()
-g_startup_settings = get_startup_settings()
+_G.g_config = get_config()
+_G.g_names = get_names()
+_G.g_startup_settings = get_startup_settings()
 LC_PATH = '__Kux-LogisticsCenterCS__'

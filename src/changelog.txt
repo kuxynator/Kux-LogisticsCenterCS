@@ -1,9 +1,21 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.0
+Date: 2023-06-07
+  Graphics:
+    - new power indicator graphics
+  Bugfixes:
+    - FIX chest management
+    - FIX rescan
+  Changes:
+    - force a rescan if old mod version < 2.4.0
+    - extensive refactorization
+    - dropped internal zh-CN localization support
+---------------------------------------------------------------------------------------------------
 Version: 2.3.1
 Date: 2023-05-15
-    Changes:
-      - add mod.lua
-      - add Kux-CoreLib dependency
+  Changes:
+    - add mod.lua
+    - add Kux-CoreLib dependency
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.2
 Date: 2021-01-21

@@ -99,7 +99,7 @@ data:extend({entity,item,recipe})
 
 if true then
 	-- KUX MODIFICATION additional provider chest working also as storage for bots
-	local name = g_names.requester_chest_1_1 .. "-s"
+	local name = g_names.requester_storage_chest_1_1
 	local entity = table.deepcopy(data.raw["logistic-container"]["logistic-chest-storage"])
 	local recipe = table.deepcopy(data.raw.recipe["logistic-chest-storage"])
 	local item   = table.deepcopy(data.raw.item["logistic-chest-storage"])

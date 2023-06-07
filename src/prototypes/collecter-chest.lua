@@ -19,7 +19,7 @@ local function make_prototype(name, icon, inventory_size, max_health, width, hei
                 inventory_size = inventory_size,
                 max_health = max_health,
                 flags = {'placeable-neutral', 'placeable-player', 'player-creation'},
-                minable = {hardness = 0.5, mining_time = 1, result = name},
+                minable = {mining_time = 0.1, result = name},
                 fast_replaceable_group = 'container',
                 selection_box = {{-h_width, -h_height}, {h_width, h_height}},
                 collision_box = {{-h_width + 0.1, -h_height + 0.1}, {h_width - 0.1, h_height - 0.1}},
