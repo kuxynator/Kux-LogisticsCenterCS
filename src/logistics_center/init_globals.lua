@@ -36,7 +36,7 @@ function init_globals()
             entities = {},
             count = 0,
             checked_index = 0,
-            --TODO
+            check_per_round=0 -- must be initialized
         }
 
     
@@ -49,8 +49,8 @@ function init_globals()
             empty_stack = {count = 0, data = {}},
             entities = {},
             count = 0,
-            checked_index = 0
-            --TODO
+            checked_index = 0,
+            check_per_round=0, --must be initialized
         }
 
     -- {count, parameters, entities = {[index] = entity}

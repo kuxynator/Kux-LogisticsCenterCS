@@ -28,20 +28,20 @@ Chest = {}
 
 local function show_flying_text(entity, nearest_lc)
     local text = {}
-    if nearest_lc ~= nil then
+    local color = {r = 228 / 255, g = 236 / 255, b = 0}
+    if nearest_lc and nearest_lc.eei then
         text = {
             g_names.locale_flying_text_when_build_chest,
             string.format('%.1f', calc_distance_between_two_points(entity.position, nearest_lc.eei.position))
         }
     else
-        text = {
-            g_names.locale_flying_text_when_build_chest_no_nearest_lc
-        }
+        text = {g_names.locale_flying_text_when_build_chest_no_nearest_lc}
+        color = {1,0.2,0.2,1}
     end
     entity.surface.create_entity {
         name = g_names.distance_flying_text,
         position = {x = entity.position.x, y = entity.position.y - 1},
-        color = {r = 228 / 255, g = 236 / 255, b = 0},
+        color = color,
         text = text
     }
 end
@@ -59,11 +59,11 @@ function Chests.add_cc(entity)
         global.cc_entities.index = global.cc_entities.index + 1
     end
 
-    local nearest_lc = Chests.find_nearest_lc(entity, 1)
+    local nearest_lc = Chests.find_nearest_lc(entity, 1) -- TODO eei can be nil!
     global.cc_entities.entities[index] = {entity = entity, nearest_lc = nearest_lc}
 
     -- show flying text
-    show_flying_text(entity, nearest_lc)
+    show_flying_text(entity)
 
     global.cc_entities.count = global.cc_entities.count + 1
 

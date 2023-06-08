@@ -60,7 +60,7 @@ function Technology.research_lc_capacity(research)
         v.max_control = tech.lc_capacity
     end
 
-    LCC:update_signals()
+    LCC.update_signals()
 
     game.print({'ab-logisticscenter-text.print-after-tech-lc-capacity-researched', tech.lc_capacity})
 end
@@ -105,7 +105,7 @@ function Technology.research_chest_power_consumption(research)
     )
 
     -- recalc distance
-    LC:recalc_distance_when_power_consumption_changed()
+    LC.recalc_distance_when_power_consumption_changed()
 end
 
 return Technology

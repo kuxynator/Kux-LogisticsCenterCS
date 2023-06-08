@@ -1,6 +1,17 @@
 ---------------------------------------------------------------------------------------------------
-Version: 2.4.0
+Version: 2.4.2
+Date: 2023-06-08
+  Bugfixes:
+    - FIX crash on build chest in other surface (not supported operation)
+    - FIX crash on technology researched
+---------------------------------------------------------------------------------------------------
+Version: 2.4.1
 Date: 2023-06-07
+  Bugfixes:
+    - FIX crash on new game start
+---------------------------------------------------------------------------------------------------
+Version: 2.4.0
+Date: 2023-06-06
   Graphics:
     - new power indicator graphics
   Bugfixes:

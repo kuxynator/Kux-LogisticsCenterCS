@@ -6,6 +6,7 @@ require('prototypes.logistics-center-controller')
 -- technology
 require('prototypes.tech-logistics-center-capacity')
 require('prototypes.tech-power-consumption')
+require('prototypes.tech-logistics-center-input-flow-limit')
 -- else
 require('prototypes.electric-energy-interface')
 require("prototypes.logistics-center-animation")

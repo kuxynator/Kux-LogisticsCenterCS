@@ -2,7 +2,7 @@
 LogisticsCenterController = {}
 
 ---@deprecated
-LCC=LogisticsCenter
+LCC=LogisticsCenterController
 
 local math_min = math.min
 

@@ -8,6 +8,7 @@ local function get_config()
         tech_lc_capacity_increment = {19000, 30000, 50000, 100000},
         -- decrement of cc/rc power_consumption percentages of each research, default = {0.015, 0.015, 0.015, 0.015}
         tech_power_consumption_decrement = {0.015, 0.015, 0.015, 0.015},
+        tech_lc_input_flow_limit_factor = {1.5, 2, 2,5, 3}, --TODO input_flow_limit
         -------------------------------------------------------------------------------------------
         -- DEFAULT CONFIGS
         -- capacity of the logistics center of each item, default = 10000
@@ -46,6 +47,7 @@ local function get_names()
         -- TECHNOLOGY NAMES
         tech_lc_capacity = 'ab-lc-tech-lc-capacity',
         tech_power_consumption = 'ab-lc-tech-power-consumption',
+        tech_lc_input_flow_limit = 'ab-lc-tech-lc-input-flow-limity',
         distance_flying_text = 'distance-flying-text',
         -------------------------------------------------------------------------------------------
         -- MATCH PATTERN STRINGS
