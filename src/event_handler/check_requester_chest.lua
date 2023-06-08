@@ -5,26 +5,25 @@ local startup_settings = g_startup_settings
 
 -- check all requester chests
 function check_rcs_on_nth_tick(nth_tick_event)
-    if global.lc_entities.count < 1 then
-        return
-    end
+    if global.lc_entities.count < 1 then return end
+	local chestStorage = global.rc_entities;
 
 	-- print("check_rcs_on_nth_tick")
-	-- print("  global.rc_entities.index:               "..global.rc_entities.index)
-	-- print("  global.rc_entities.checked_index:   "..global.rc_entities.checked_index)
-	-- print("  global.rc_entities.check_per_round: "..global.rc_entities.check_per_round)
+	-- print("  chestStorage.index:               "..chestStorage.index)
+	-- print("  chestStorage.checked_index:   "..chestStorage.checked_index)
+	-- print("  chestStorage.check_per_round: "..chestStorage.check_per_round)
     local crc_item_stack = {name = nil, count = 0}
 
-    local index_begin = global.rc_entities.checked_index + 1
-	if(index_begin > global.rc_entities.index -1) then index_begin = 0 end
-    local index_end = math.min(index_begin + global.rc_entities.check_per_round, global.rc_entities.index -1)
+    local index_begin = chestStorage.checked_index + 1
+	if(index_begin > chestStorage.index -1) then index_begin = 1 end
+    local index_end = math.min(index_begin + chestStorage.check_per_round -1, chestStorage.index -1)
 	--print("check_rcs_on_nth_tick "..index_begin.."-"..index_end)
 
     for index = index_begin, index_end, 1 do
-		global.rc_entities.checked_index = index
-        -- ??? if index > global.rc_entities.index then index = index - global.rc_entities.index end
+		chestStorage.checked_index = index
+        -- ??? if index > chestStorage.index then index = index - chestStorage.index end
 
-        local chest = global.rc_entities.entities[index] --[[@as RequestChest]]
+        local chest = chestStorage.entities[index] --[[@as RequestChest]]
         if chest == nil then goto next_chest end
         if not chest.entity.valid then print("request chest("..index..") is invalid");--[[Chests.remove_rc(index); ]] goto next_chest end
         if chest.nearest_lc == nil then goto next_chest end
@@ -78,14 +77,10 @@ function check_rcs_on_nth_tick(nth_tick_event)
 		::next_chest::
     end
 
-	if(global.rc_entities.checked_index == global.rc_entities.index-1) then
-		global.rc_entities.checked_index = 0
-	end
-
     -- -- calc checked_index
-    -- if global.rc_entities.index ~= 0 then
-    --     global.rc_entities.checked_index = index_end % global.rc_entities.index
+    -- if chestStorage.index ~= 0 then
+    --     chestStorage.checked_index = index_end % chestStorage.index
     -- else
-    --     global.rc_entities.checked_index = 0
+    --     chestStorage.checked_index = 0
     -- end
 end

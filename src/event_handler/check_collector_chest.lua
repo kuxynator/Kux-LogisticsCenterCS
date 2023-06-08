@@ -1,20 +1,18 @@
-local math_floor = math.floor
-local math_min = math.min
-
 -- check all collector chests, all items
 function check_ccs_on_nth_tick_all(event)
     if global.lc_entities.count < 1 then return end
-
+    local chestStorage = global.cc_entities
     local crc_item_stack = {name = nil, count = 0}
 
-    local index_begin = global.cc_entities.checked_index + 1
-    if(index_begin > global.rc_entities.index -1) then index_begin = 0 end
-    local index_end = math.min(index_begin + global.cc_entities.check_per_round, global.cc_entities.index-1)
+    local index_begin = chestStorage.checked_index + 1
+    if(index_begin > chestStorage.index -1) then index_begin = 1 end
+
+    local index_end = math.min(index_begin + chestStorage.check_per_round-1, chestStorage.index-1)
     --print("check_ccs_on_nth_tick_all "..index_begin.."-"..index_end)
     for iChest = index_begin, index_end, 1 do
-        -- ??? if index > global.cc_entities.index then index = index - global.cc_entities.index end
-        global.cc_entities.checked_index = iChest
-        local chest = global.cc_entities.entities[iChest]
+        -- ??? if index > chestStorage.index then index = index - chestStorage.index end
+        chestStorage.checked_index = iChest
+        local chest = chestStorage.entities[iChest]
         if chest == nil then --[[print("cc("..index..") nil");]] goto next_chest end
         if not chest.entity.valid then print("cc("..iChest..") entity invalid"); --[[CHEST:remove_cc(iChest);]] goto next_chest end
         if chest.nearest_lc == nil then --[[print("cc nearest_lc nil");]] goto next_chest end
@@ -31,9 +29,9 @@ function check_ccs_on_nth_tick_all(event)
                 item = Items.add(name)
             end
             -- enough energy?
-            count = math_min(count, math_floor(eei.energy / power_consumption))
+            count = math.min(count, math.floor(eei.energy / power_consumption))
             -- calc max_control
-            count = math_min(count, item.max_control - item.stock)
+            count = math.min(count, item.max_control - item.stock)
 
             if count > 0 then
                 crc_item_stack.name = name
@@ -50,15 +48,11 @@ function check_ccs_on_nth_tick_all(event)
 		::next_chest::
     end
 
-    if(global.cc_entities.checked_index == global.cc_entities.index-1) then
-        global.cc_entities.checked_index = 0
-    end
-
     -- -- calc checked_index
-    -- if global.cc_entities.index ~= 0 then
-    --     global.cc_entities.checked_index = index_end % global.cc_entities.index
+    -- if chestStorage.index ~= 0 then
+    --     chestStorage.checked_index = index_end % chestStorage.index
     -- else
-    --     global.cc_entities.checked_index = 0
+    --     chestStorage.checked_index = 0
     -- end
 end
 
@@ -101,9 +95,9 @@ function check_ccs_on_nth_tick_ores_only(event)
                                 end
 
                                 -- enough energy?
-                                count = math_min(count, math_floor(eei.energy / power_consumption))
+                                count = math.min(count, math.floor(eei.energy / power_consumption))
                                 -- calc max_control
-                                count = math_min(count, item.max_control - item.stock)
+                                count = math.min(count, item.max_control - item.stock)
 
                                 if count > 0 then
                                     crc_item_stack.name = name
@@ -174,9 +168,9 @@ function check_ccs_on_nth_tick_except_ores(event)
                                 end
 
                                 -- enough energy?
-                                count = math_min(count, math_floor(eei.energy / power_consumption))
+                                count = math.min(count, math.floor(eei.energy / power_consumption))
                                 -- calc max_control
-                                count = math_min(count, item.max_control - item.stock)
+                                count = math.min(count, item.max_control - item.stock)
 
                                 if count > 0 then
                                     crc_item_stack.name = name

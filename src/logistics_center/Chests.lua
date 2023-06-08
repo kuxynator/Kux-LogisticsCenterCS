@@ -19,17 +19,17 @@ Chest = {}
 
 ---Global chest stroage(global.cc_entities|global.rc_entities)
 ---@class ChestStorage
----@field count uint Number of valid chests in entities
+---@field count integer Number of valid chests in entities
 ---@field empty_stack EmptyStack The stack for empty indices
----@field index uint Next free index
+---@field index integer Next free index
 ---@field entities Chest[]
----@field checked_index uint Index of last checked chest
+---@field checked_index integer Index of last checked chest
 ---@field x number
 --- {index, empty_stack, entities = {[index] = {entity, nearest_lc = {power_consumption, eei}}}}
 
 local function show_flying_text(entity, nearest_lc)
     local text = {}
-    local color = {r = 0.2, 1, 0.2, 1}
+    local color = {0.2, 1, 0.2, 1}
     if nearest_lc and nearest_lc.eei then
         text = {
             g_names.locale_flying_text_when_build_chest,
@@ -37,7 +37,7 @@ local function show_flying_text(entity, nearest_lc)
         }
     else
         text = {g_names.locale_flying_text_when_build_chest_no_nearest_lc}
-        color = {1,0.2,0.2,1}
+        color = {1, 0.2, 0.2, 1}
     end
     entity.surface.create_entity {
         name = g_names.distance_flying_text,
@@ -111,6 +111,13 @@ function Chests.add(entity, chest_type)
     chestStorage.count = chestStorage.count + 1
     -- recalc cpr
     chestStorage.check_per_round = math.ceil(chestStorage.count * check_percentage)
+    --[[
+    print("add chest")
+    prints("  type:"..switch(chest_type,{"collector","requester"})))
+    print("  count: ".. chestStorage.count)
+    print("  check_percentage: ".. check_percentage)
+    print("  check_per_round: ".. chestStorage.check_per_round)
+    --]]
 end
 
 ---Gets the index of the chest
