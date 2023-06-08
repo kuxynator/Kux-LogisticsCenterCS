@@ -24,11 +24,12 @@ Chest = {}
 ---@field index uint Next free index
 ---@field entities Chest[]
 ---@field checked_index uint Index of last checked chest
+---@field x number
 --- {index, empty_stack, entities = {[index] = {entity, nearest_lc = {power_consumption, eei}}}}
 
 local function show_flying_text(entity, nearest_lc)
     local text = {}
-    local color = {r = 228 / 255, g = 236 / 255, b = 0}
+    local color = {r = 0.2, 1, 0.2, 1}
     if nearest_lc and nearest_lc.eei then
         text = {
             g_names.locale_flying_text_when_build_chest,
@@ -46,88 +47,92 @@ local function show_flying_text(entity, nearest_lc)
     }
 end
 
---- Add to watch-list
+---Gets the chest type
 ---@param entity LuaEntity
-function Chests.add_cc(entity)
-    local index
-    local empty_stack = global.cc_entities.empty_stack
-    if empty_stack.count > 0 then
-        index = empty_stack.data[empty_stack.count]
-        empty_stack.count = empty_stack.count - 1
+---@return integer?
+function Chests.getChestType(entity)
+    if(not entity) then error("Entity must not be nil.") end
+    local name = entity.name
+    if name == g_names.collecter_chest_1_1 or
+        -- if string.match(name,names.requester_chest_pattern) ~= nil then  --- this is not recommended
+        -- name == names.collecter_chest_3_6 or
+        -- name == names.collecter_chest_6_3
+        name == g_names.collecter_chest_1_1.."-pp" or --TODO KUX
+        name == g_names.collecter_chest_1_1.."-s"
+    then
+        return 1
+    elseif name == g_names.requester_chest_1_1 or
+        -- name == names.requester_chest_3_6 or
+        -- name == names.requester_chest_6_3
+        name == g_names.requester_chest_1_1.."b" or --TODO KUX
+        name == g_names.requester_storage_chest_1_1
+    then
+        return 2
     else
-        index = global.cc_entities.index
-        global.cc_entities.index = global.cc_entities.index + 1
+        return nil
     end
-
-    local nearest_lc = Chests.find_nearest_lc(entity, 1) -- TODO eei can be nil!
-    global.cc_entities.entities[index] = {entity = entity, nearest_lc = nearest_lc}
-
-    -- show flying text
-    show_flying_text(entity)
-
-    global.cc_entities.count = global.cc_entities.count + 1
-
-    -- recalc cpr
-    global.cc_entities.check_per_round = math.ceil(global.cc_entities.count * g_startup_settings.check_cc_percentages)
 end
 
----Add rerquest chest to watch-list
+---Gets the chest storage
+---@param entity LuaEntity?
+---@param chestType nil|1|2
+---@return ChestStorage
+function Chests.getChestStorage(entity, chestType)
+    if(not chestType) then chestType = Chests.getChestType(entity) or error("Invalid chest type") end
+    return switch(chestType,{global.cc_entities, global.rc_entities}) --[[@as ChestStorage]]
+    --TODO get chest storage by surface.name
+end
+
+---Add a chest
 ---@param entity LuaEntity
-function Chests.add_rc(entity)
+---@param chest_type integer?
+function Chests.add(entity, chest_type)
+    if(not chest_type) then chest_type = Chests.getChestType(entity) or error("Invalid chest type") end
+    local chestStorage = switch(chest_type,{global.cc_entities, global.rc_entities})
+    local check_percentage = switch(chest_type,{g_startup_settings.check_cc_percentages,g_startup_settings.check_rc_percentages})
+
     -- local index
-    -- local empty_stack = global.rc_entities.empty_stack
+    -- local empty_stack = chestStorage.empty_stack
     -- if empty_stack.count > 0 then
     --     index = empty_stack.data[empty_stack.count]
     --     empty_stack.count = empty_stack.count - 1
     -- else
-    --     index = global.rc_entities.index
-    --     global.rc_entities.index = global.rc_entities.index + 1
+    --     index = chestStorage.index
+    --     chestStorage.index = gchestStorage.index + 1
     -- end
 
-    local index = global.rc_entities.index;
-    global.rc_entities.index = global.rc_entities.index +1
-    local nearest_lc = Chests.find_nearest_lc(entity, 2)
-    global.rc_entities.entities[index] = {entity = entity, nearest_lc = nearest_lc}
+    local index = chestStorage.index;
+    chestStorage.index = chestStorage.index +1
+    local nearest_lc = Chests.getConnection(entity, chest_type)
+    chestStorage.entities[index] = {entity = entity, nearest_lc = nearest_lc}
 
-    -- show flying text
     show_flying_text(entity, nearest_lc)
 
-    global.rc_entities.count = global.rc_entities.count + 1
-
+    chestStorage.count = chestStorage.count + 1
     -- recalc cpr
-    global.rc_entities.check_per_round = math.ceil(global.rc_entities.count * g_startup_settings.check_rc_percentages)
+    chestStorage.check_per_round = math.ceil(chestStorage.count * check_percentage)
 end
 
----comment
----@param t Chest[]
+---Gets the index of the chest
+---@param chestStorage ChestStorage
 ---@param entity LuaEntity
 ---@return integer #Index of the chest or 0
-local function getIndex(t, entity)
-    for index, v in pairs(t) do
+local function getIndex(chestStorage, entity)
+    for index, v in pairs(chestStorage.entities) do
         if(v.entity == entity) then return index end
     end
     return 0
 end
 
----@deprecated
----Remove collector chast
----@param entityOrIndex integer|LuaEntity
-function Chests.remove_cc(entityOrIndex) Chests.remove(entityOrIndex,1) end
-
----@deprecated
----Remove requester chest
----@param entityOrIndex integer|LuaEntity
-function Chests.remove_rc(entityOrIndex) Chests.remove(entityOrIndex,2) end
-
 ---Remove chest
 ---@param entityOrIndex any
 function Chests.remove(entityOrIndex, chestType)
     print("Chests.remove (type:"..chestType..")")
-    local entities = switch(chestType,{global.cc_entities, global.rc_entities}) --[[@as ChestStorage]]
+    local chestStorage = switch(chestType,{global.cc_entities, global.rc_entities}) --[[@as ChestStorage]]
 
     local index = 0
     if(type(entityOrIndex)=="number") then index = entityOrIndex;
-    else index = getIndex(entities.entities, entityOrIndex) end
+    else index = getIndex(chestStorage, entityOrIndex) end
     if(index==0) then return end
 
     -- entities[index] = nil
@@ -136,24 +141,24 @@ function Chests.remove(entityOrIndex, chestType)
     -- empty_stack.count = empty_stack.count + 1
     -- empty_stack.data[empty_stack.count] = index
 
-    table.remove(entities.entities, index)
-    entities.count = entities.count -1
-    entities.index = entities.index -1
+    table.remove(chestStorage.entities, index)
+    chestStorage.count = chestStorage.count -1
+    chestStorage.index = chestStorage.index -1
 
-    assert(entities.count == #entities.entities, entities.count ..":"..#entities.entities)
+    assert(chestStorage.count == #chestStorage.entities, chestStorage.count ..":"..#chestStorage.entities)
 
     print(switch(chestType,{"collectot","requester"}).." chest "..index.." removed")
 
     -- recalc cpr
-    if(index<entities.checked_index) then entities.checked_index= math.max(entities.checked_index-1,0) end
-    if(entities.checked_index >= entities.index) then entities.checked_index = 0 end
+    if(index<chestStorage.checked_index) then chestStorage.checked_index= math.max(chestStorage.checked_index-1,0) end
+    if(chestStorage.checked_index >= chestStorage.index) then chestStorage.checked_index = 0 end
 
     if(chestType==1) then
-        global.cc_entities.check_per_round = math.ceil(entities.count * g_startup_settings.check_cc_percentages)
+        global.cc_entities.check_per_round = math.ceil(chestStorage.count * g_startup_settings.check_cc_percentages)
     else
         global.rc_entities.check_per_round = math.ceil(global.rc_entities.count * g_startup_settings.check_rc_percentages)
     end
-    print("entities.checked_index: "..entities.checked_index)
+    print("entities.checked_index: "..chestStorage.checked_index)
 end
 
 ---Calkulates the power consumption 
@@ -182,12 +187,12 @@ function Chests.calc_power_consumption(distance, eei, chest_type)
     end
 end
 
----comment
+---Create a new connection
 ---@param distance number Distance between logistcs center and chest
 ---@param eei LuaEntity The energy interface entity
 ---@param chest_type uint
 ---@return Connection
-function Chests.getConnection(distance, eei, chest_type)
+function Chests.newConnection(distance, eei, chest_type)
     return {
         eei = eei,
         power_consumption = Chests.calc_power_consumption(distance, eei, chest_type)
@@ -196,9 +201,9 @@ end
 
 --- Find nearest lc and return the connection.
 ---@param entity LuaEntity The chest entity
----@param chest_type any
+---@param chest_type 1|2
 ---@return Connection?
-function Chests.find_nearest_lc(entity, chest_type)
+function Chests.getConnection(entity, chest_type)
     if global.lc_entities.count == 0 then return nil end
 
     local eei = nil
@@ -213,72 +218,60 @@ function Chests.find_nearest_lc(entity, chest_type)
         ::next::
     end
 
-    return Chests.getConnection(nearest_distance, eei, chest_type)
+    return Chests.newConnection(nearest_distance, eei, chest_type)
 end
 
--- Add to watch-list
-local function re_scan_add_cc(entity)
-    global.cc_entities.entities[global.cc_entities.index] = {
+---Add to chest watch-list
+---@param entity LuaEntity
+---@param chestType any
+local function rescan_addChest(entity, chestType)
+    local chestStorage = Chests.getChestStorage(entity, chestType)
+    chestStorage.entities[chestStorage.index] = {
         entity = entity, 
-        nearest_lc = Chests.find_nearest_lc(entity, 1)
+        nearest_lc = Chests.getConnection(entity, chestType)
     }
-    global.cc_entities.index = global.cc_entities.index + 1
-    global.cc_entities.count = global.cc_entities.count + 1
+    chestStorage.index = chestStorage.index + 1
+    chestStorage.count = chestStorage.count + 1
 end
 
--- Add to watch-list
-local function re_scan_add_rc(entity)
-    global.rc_entities.entities[global.rc_entities.index] = {
-        entity = entity, 
-        nearest_lc = Chests.find_nearest_lc(entity, 2)
+function Chests.newChestStorage(chestType,surface)
+    return {
+        index = 1,
+        empty_stack = {count = 0, data = {}},
+        entities = {},
+        count = 0,
+        checked_index = 0
     }
-    global.rc_entities.index = global.rc_entities.index + 1
-    global.rc_entities.count = global.rc_entities.count + 1
 end
 
 function Chests.rescan()
     log("Chests.rescan()")
-    global.cc_entities = {
-        index = 1,
-        empty_stack = {count = 0, data = {}},
-        entities = {},
-        count = 0,
-        checked_index=0
-    }
-    global.cc_entities.checked_index=0
 
-    global.rc_entities = {
-        index = 1,
-        empty_stack = {count = 0, data = {}},
-        entities = {},
-        count = 0,
-        checked_index=0
-    }
-    global.rc_entities.checked_index=0
+    --TODO use surfaces storage
+
+    global.cc_entities = Chests.newChestStorage(1,nil)
+    global.rc_entities = Chests.newChestStorage(2,nil)
 
     local total_ccs = 0
     local total_rcs = 0
 
-    print(g_names.collecter_chest_1_1)
-    print(g_names.requester_chest_1_1)
-
     for _, surface in pairs(game.surfaces) do
         -- re-scan collector chests
         local ccs = surface.find_entities_filtered {name = g_names.collecter_chest_1_1}
-        for _, v in pairs(ccs) do re_scan_add_cc(v) end
+        for _, v in pairs(ccs) do rescan_addChest(v,1) end
 		local ccspp = surface.find_entities_filtered {name = g_names.collecter_chest_1_1.."-pp"} --TODO KUX MODIFICATION
-        for _, v in pairs(ccspp) do re_scan_add_cc(v) end
+        for _, v in pairs(ccspp) do rescan_addChest(v,1) end
 		local ccss = surface.find_entities_filtered {name = g_names.collecter_chest_1_1.."-s"} --TODO KUX MODIFICATION
-        for _, v in pairs(ccss) do re_scan_add_cc(v) end
+        for _, v in pairs(ccss) do rescan_addChest(v,1) end
 		total_ccs = total_ccs + #ccs + #ccspp + #ccss
 
         -- re-scan requester chests
         local rcs = surface.find_entities_filtered {name = g_names.requester_chest_1_1}
-        for _, v in pairs(rcs) do re_scan_add_rc(v) end
+        for _, v in pairs(rcs) do rescan_addChest(v,2) end
 		local rcsb = surface.find_entities_filtered {name = g_names.requester_chest_1_1.."b"} --TODO KUX MODIFICATION
-        for _, v in pairs(rcsb) do re_scan_add_rc(v) end
+        for _, v in pairs(rcsb) do rescan_addChest(v,2) end
 		local rcss = surface.find_entities_filtered {name = g_names.requester_chest_1_1.."-s"} --TODO KUX MODIFICATION
-        for _, v in pairs(rcss) do re_scan_add_rc(v) end
+        for _, v in pairs(rcss) do rescan_addChest(v,2) end
         total_rcs = total_rcs + #rcs + #rcsb + #rcss
     end
 

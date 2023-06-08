@@ -178,11 +178,7 @@ function LogisticsCenter.remove(entity)
 
     local p_str = surface_and_position_to_string(entity)
     local pack = lcs.entities[p_str]
-
-    -- in case duplicated event
-    if pack == nil then
-        return
-    end
+    if pack == nil then return end --< in case duplicated event
 
     -- game.print('pre-mined:' .. p_str)
 
@@ -283,87 +279,67 @@ function LogisticsCenter.update_all_lc_signals()
 end
 
 function LogisticsCenter.recalc_distance_when_power_consumption_changed()
-    -- recalc cc
-    for _, v in pairs(global.cc_entities.entities) do
-        if v.entity.valid and v.nearest_lc ~= nil then
-            v.nearest_lc = Chests.getConnection(calc_distance_between_two_points(v.entity.position, v.nearest_lc.eei.position), v.nearest_lc.eei, 1)
+    local function recalc(chestStorage, chest_type)
+        for _, v in pairs(chestStorage.entities) do
+            if v.entity.valid and v.nearest_lc and v.nearest_lc.eei then
+                local distance = calc_distance_between_two_points(v.entity.position, v.nearest_lc.eei.position)
+                v.nearest_lc = Chests.newConnection(distance, v.nearest_lc.eei, chest_type)
+            end
         end
     end
-
-    -- recalc rc
-    for _, v in pairs(global.rc_entities.entities) do
-        if v.entity.valid and v.nearest_lc ~= nil then
-            v.nearest_lc = Chests.getConnection(calc_distance_between_two_points(v.entity.position, v.nearest_lc.eei.position), v.nearest_lc.eei, 2)
-        end
-    end
+    recalc(global.cc_entities, 1)
+    recalc(global.rc_entities, 2)
 end
 
 function LogisticsCenter.recalc_distance_when_add_lc(entity, eei)
-    local old_dis
-    local new_dis
-
-    -- recalc cc
-    for index, v in pairs(global.cc_entities.entities) do
-        if v.entity.valid then
-            -- v.nearest_lc = CHEST:find_nearest_lc(v.entity, 1)
+    local function recalc(chestStorage, chest_type)
+        local invalidEntities={}
+        for i, v in pairs(chestStorage.entities) do
+            if not v.entity.valid then table.insert(invalidEntities, i); goto next; end
             if v.nearest_lc == nil then
-                v.nearest_lc = Chests.find_nearest_lc(v.entity, 1)
+                v.nearest_lc = Chests.getConnection(v.entity, chest_type)
             else
-                old_dis = calc_distance_between_two_points(v.entity.position, v.nearest_lc.eei.position)
-                new_dis = calc_distance_between_two_points(v.entity.position, entity.position)
-                if new_dis <= old_dis then
-                    v.nearest_lc = Chests.getConnection(new_dis, eei, 1)
+                local new_dis = calc_distance_between_two_points(v.entity.position, entity.position)
+                if(not v.nearest_lc.eei) then
+                    v.nearest_lc = Chests.newConnection(new_dis, eei, chest_type)
+                else
+                    local old_dis = calc_distance_between_two_points(v.entity.position, v.nearest_lc.eei.position)
+                    if new_dis <= old_dis then
+                        v.nearest_lc = Chests.newConnection(new_dis, eei, chest_type)
+                    end
                 end
             end
-        else
-            Chests.remove_cc(index)
+            ::next::
+        end
+
+        for i = #invalidEntities, 1, -1 do
+            --Chests.remove_cc(i) 
         end
     end
 
-    -- recalc rc
-    for index, v in pairs(global.rc_entities.entities) do
-        if v.entity.valid then
-            -- v.nearest_lc = CHEST:find_nearest_lc(v.entity, 2)
-            if v.nearest_lc == nil then
-                v.nearest_lc = Chests.find_nearest_lc(v.entity, 2)
-            else
-                old_dis = calc_distance_between_two_points(v.entity.position, v.nearest_lc.eei.position)
-                new_dis = calc_distance_between_two_points(v.entity.position, entity.position)
-                if new_dis <= old_dis then
-                    v.nearest_lc = Chests.getConnection(new_dis, eei, 2)
-                end
-            end
-        else
-            Chests.remove_cc(index)
-        end
-    end
-
+    recalc(global.cc_entities, 1)
+    recalc(global.rc_entities, 2)
     LogisticsCenter.recalc_distance_when_power_consumption_changed()
 end
 
 function LogisticsCenter.recalc_distance_when_remove_lc(entity, eei)
-    -- recalc cc
-    for index, v in pairs(global.cc_entities.entities) do
-        if v.entity.valid then
+    local function recalc(chestStorage, chest_type)
+        local invalidEntities={}
+        for i,v in pairs(chestStorage.entities) do
+            if not v.entity.valid then table.insert(invalidEntities, i); goto next; end
             if v.nearest_lc ~= nil and v.nearest_lc.eei == eei then
-                v.nearest_lc = Chests.find_nearest_lc(v.entity, 1)
+                v.nearest_lc = Chests.getConnection(v.entity, chest_type)
             end
-        else
-            Chests.remove_cc(index)
+            ::next::
+        end
+
+        for i = #invalidEntities, 1, -1 do
+            --Chests.remove_cc(i) 
         end
     end
 
-    -- recalc rc
-    for index, v in pairs(global.rc_entities.entities) do
-        if v.entity.valid then
-            if v.nearest_lc ~= nil and v.nearest_lc.eei == eei then
-                v.nearest_lc = Chests.find_nearest_lc(v.entity, 2)
-            end
-        else
-            Chests.remove_rc(index)
-        end
-    end
-
+    recalc(global.cc_entities, 1)
+    recalc(global.rc_entities, 2)
     LogisticsCenter.recalc_distance_when_power_consumption_changed()
 end
 

@@ -51,14 +51,14 @@ function on_built(event)
 		name == names.collecter_chest_1_1.."-pp" or --TODO KUX
 		name == names.collecter_chest_1_1.."-s"
 	then
-        Chests.add_cc(entity)
+        Chests.add(entity, 1)
     elseif name == names.requester_chest_1_1 or
         -- name == names.requester_chest_3_6 or
 		-- name == names.requester_chest_6_3
 		name == names.requester_chest_1_1.."b" or --TODO KUX
 		name == names.requester_storage_chest_1_1
 	then
-        Chests.add_rc(entity)
+        Chests.add(entity, 2)
     elseif name == names.logistics_center then
         LogisticsCenter.add(entity)
     elseif name == names.logistics_center_controller then

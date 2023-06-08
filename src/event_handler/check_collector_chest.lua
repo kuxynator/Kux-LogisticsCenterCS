@@ -122,7 +122,7 @@ function check_ccs_on_nth_tick_ores_only(event)
                     end
                 end
             else
-                Chests:remove_cc(index)
+                Chests.remove(index,1)
             end
         end
     end
@@ -195,7 +195,7 @@ function check_ccs_on_nth_tick_except_ores(event)
                     end
                 end
             else
-                Chests:remove_cc(index)
+                Chests.remove(index,1)
             end
         end
     end

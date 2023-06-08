@@ -46,9 +46,9 @@ local function on_destroy(event)
     print("on_destroy "..entity.name.."  "..event.tick)
 
     if string.match(entity.name, g_names.collecter_chest_pattern) then
-        Chests.remove_cc(entity)
+        Chests.remove(entity,1)
     elseif string.match(entity.name, g_names.requester_chest_pattern) then
-        Chests.remove_rc(entity)
+        Chests.remove(entity,2)
     elseif entity.name == g_names.logistics_center then
         LogisticsCenter.remove(entity)
     elseif entity.name == g_names.logistics_center_controller then
