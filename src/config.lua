@@ -96,10 +96,10 @@ local function get_startup_settings()
         default_rc_power_consumption = settings.startup['ab-logistics-center-default-rc-power-consumption'].value,
         -------------------------------------------------------------------------------------------
         --!!ATTENTION! the values "xx_on_nth_tick" below can NOT be the same with each other.
-        -- check collecter chests every nth tick, default = 20
-        check_cc_on_nth_tick = settings.startup['ab-logistics-center-check-cc-on-nth-tick'].value,
+        -- check collecter chests every nth tick, default = 20        
+        check_cc_on_nth_tick = settings.startup['ab-logistics-center-check-cc-on-nth-tick'].value--[[@as uint]],
         -- check requester chests every nth tick, default = 10
-        check_rc_on_nth_tick = settings.startup['ab-logistics-center-check-rc-on-nth-tick'].value,
+        check_rc_on_nth_tick = settings.startup['ab-logistics-center-check-rc-on-nth-tick'].value--[[@as uint]],
         -- check 1.5%(on default) collecter chests every 'check_cc_on_nth_tick', default = 0.03
         check_cc_percentages = settings.startup['ab-logistics-center-check-cc-percentages'].value,
         -- check 1.5%(on default) requester chests every 'check_rc_on_nth_tick', default = 0.03

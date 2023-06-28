@@ -16,13 +16,14 @@ function check_ccs_on_nth_tick_all(event)
         if chest == nil then --[[print("cc("..index..") nil");]] goto next_chest end
         if not chest.entity.valid then print("cc("..iChest..") entity invalid"); --[[CHEST:remove_cc(iChest);]] goto next_chest end
         if chest.nearest_lc == nil then --[[print("cc nearest_lc nil");]] goto next_chest end
+        local eei = chest.nearest_lc.eei --> LuaEntity name="ab-lc-electric-energy-interface"
+        if(eei==nil) then goto next_chest end
         local inventory = chest.entity.get_output_inventory()
         if(inventory==nil) then goto next_chest end
         if inventory.is_empty() then goto next_chest end
-
-        local eei = chest.nearest_lc.eei --> LuaEntity name="ab-lc-electric-energy-interface"
         local power_consumption = chest.nearest_lc.power_consumption
         local contents = inventory.get_contents()
+
         for name, count in pairs(contents) do
             local item = global.items_stock.items[name]
             if item == nil then

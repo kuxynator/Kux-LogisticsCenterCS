@@ -98,7 +98,8 @@ local function pack_signals()
     return signals
 end
 
--- Add to watch-list
+---Add logistics center to watch-list
+---@param entity LuaEntity logistics_center = 'ab-lc-logistics-center',
 function LogisticsCenter.add(entity)
     local lcs = global.lc_entities
 

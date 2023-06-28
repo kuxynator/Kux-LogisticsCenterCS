@@ -70,6 +70,11 @@ local function insert_quick_start_items()
 	setDebrisItems() --does not work?
 end
 
-function on_init()
+local function on_init()
 	insert_quick_start_items()
 end
+
+script.on_init(function ()
+	init_globals()
+	on_init()
+end)

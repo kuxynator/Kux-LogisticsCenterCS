@@ -1,5 +1,5 @@
 
-function on_player_created(event)
+local function on_player_created(event)
     local player = game.players[event.player_index]
     player.print(
         {
@@ -8,3 +8,5 @@ function on_player_created(event)
         }
     )
 end
+
+script.on_event(defines.events.on_player_created, on_player_created)

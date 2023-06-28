@@ -14,6 +14,8 @@ Die dazugehörige Steuerkonsole ist nicht mehr verwendbar, du findet allerdings 
 In einem Lagerraum findest du noch ein paar Logistik-Kisten und die dazugehörigen Baupläne. Du stöberst weiter und entdeckst noch ein paar weitere Baupläne für andere Kisten, die von Logistik-Roboter angeflogen werden können, allerdings müssen diese noch etwas angepasst werden damit sie außerhalb des Schiffes funktionieren.
 Das war ein erfolgreicher Tag, jetzt musst du dich nur noch um die Stromversorgung kümmern, Vielleicht kannst du den defekten Stromgenerator noch reparieren?
 
+РУ: [Локализация](https://mods.factorio.com/mod/Localizatoin_Kux-LogisticsCenterCS)
+
 ## Creation of this mod
 
 I did play a long time with the [original mod](https://mods.factorio.com/mod/ab_logisticscenter). But since I started playing with Space Exploration, unfortunately it can't be used anymore. So I decided to rewrite the mod so that fits the Space Exploration environment. Now there is only one logistcs center, which must be built at the crash site. This one, however, helps immensely in building the new base until other transportation options have been explored.

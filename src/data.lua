@@ -1,3 +1,6 @@
+require("__Kux-CoreLib__/lib/data/@")
+require('config')
+
 -- entity/item/recipe
 require('prototypes.logistics-center')
 require('prototypes.collecter-chest')

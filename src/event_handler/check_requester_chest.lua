@@ -28,6 +28,7 @@ function check_rcs_on_nth_tick(nth_tick_event)
         if not chest.entity.valid then print("request chest("..index..") is invalid");--[[Chests.remove_rc(index); ]] goto next_chest end
         if chest.nearest_lc == nil then goto next_chest end
 		local eei = chest.nearest_lc.eei
+		if(eei==nil) then goto next_chest end
 		local power_consumption = chest.nearest_lc.power_consumption
 		local inventory = chest.entity.get_output_inventory()
 		if(inventory==nil) then goto next_chest end

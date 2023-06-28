@@ -1,7 +1,7 @@
 
 local names = g_names
 
-function on_gui_closed(event)
+local function on_gui_closed(event)
     local entity = event.entity
 
     -- incase a nil value
@@ -21,3 +21,5 @@ function on_gui_closed(event)
         end
     end
 end
+
+script.on_event(defines.events.on_gui_closed, on_gui_closed)

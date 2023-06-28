@@ -1,5 +1,3 @@
-require('config')
-
 local hsl = 1.5
 local hcl = 1.4
 
@@ -37,3 +35,7 @@ data:extend(
         }
     }
 )
+
+local eei2 = EntityData.clone("electric-energy-interface", g_names.electric_energy_interface, g_names.electric_energy_interface.."-2")
+eei2.energy_source.input_flow_limit = g_startup_settings.lc_input_flow_limit*4 + (g_startup_settings.lc_power_consumption / 1000) .. 'MW'
+data:extend({eei2})

@@ -7,7 +7,7 @@ local startup_settings = g_startup_settings
 ---when a startup setting has changed, when any prototypes have been added or removed, or when a migration was applied. 
 ---It allows the mod to make any changes it deems appropriate to both the data structures in its global table or to the 
 ---game state through LuaGameScript.
-function on_configuration_changed(data)
+local function on_configuration_changed(data)
     --log("on_configuration_changed")
     global_data_migrations()
 
@@ -56,3 +56,5 @@ function on_configuration_changed(data)
         end
     end
 end
+
+script.on_configuration_changed(on_configuration_changed)

@@ -4,44 +4,14 @@ local names = g_names
 -- script.on_event(defines.events.on_robot_built_entity,on_built,item_filter)
 -- script.on_event(defines.events.script_raised_built,on_build_adapter,item_filter)
 -- script.on_event(defines.events.script_raised_revive,on_build_adapter,item_filter)
---[[
-on_built_entity Called when player builds something. Can be filtered using LuaPlayerBuiltEntityEventFilter.
-created_entity	:: LuaEntity
-player_index	:: uint
-stack	:: LuaItemStack
-item	:: LuaItemPrototype?    The item prototype used to build the entity. Note this won't exist in some situations (built from blueprint, undo, etc).
-tags	:: Tags?    The tags associated with this entity if any.
-name	:: defines.events   Identifier of the event
-tick	:: uint Tick the event was generated.
-
-on_robot_built_entity Called when a construction robot builds an entity. Can be filtered using LuaRobotBuiltEntityEventFilter.
-robot	:: LuaEntity    The robot that did the building.
-created_entity	:: LuaEntity    The entity built.
-stack	:: LuaItemStack The item used to do the building.
-tags	:: Tags?    The tags associated with this entity if any.
-name	:: defines.events   Identifier of the event
-tick	:: uint Tick the event was generated.
-
-script_raised_built
-entity	:: LuaEntity    The entity that has been built.
-name	:: defines.events   Identifier of the event
-tick	:: uint Tick the event was generated.
-
-script_raised_revive
-entity	:: LuaEntity    The entity that was revived.
-tags	:: Tags?    The tags associated with this entity, if any.
-name	:: defines.events   Identifier of the event
-tick	:: uint Tick the event was generated.
-
-]]
 
 ---Handles some build events
 ---@param event Event_on_built_entity|Event_on_robot_built_entity|Event_script_raised_built|Event_script_raised_revive
-function on_built(event)
-	local entity = (event.created_entity or event.entity) --[[@as LuaEntity]]    
+local function on_built(event)
+	local entity = (event.created_entity or event.entity) --[[@as LuaEntity]]
     if entity == nil then return end -- in case a nil value by script_raised_built by other mods
     local name = entity.name
-    print("on_built "..name)
+    --print("on_built "..name)
 
     -- if string.match(name,names.collecter_chest_pattern) ~= nil then  --- this is not recommended
     if name == names.collecter_chest_1_1 or
@@ -65,3 +35,25 @@ function on_built(event)
         LogisticsCenterController.add(entity)
     end
 end
+
+local item_filter = {
+    {filter="name", name=g_names.collecter_chest_1_1},
+    {filter="name", name=g_names.collecter_chest_1_1.."-pp"},
+    {filter="name", name=g_names.collecter_chest_1_1.."-s"},
+
+    {filter="name", name=g_names.requester_chest_1_1},
+    {filter="name", name=g_names.requester_chest_1_1.."b"},
+    {filter="name", name=g_names.requester_chest_1_1.."-s"},
+
+    {filter="name", name=g_names.logistics_center},
+    {filter="name", name=g_names.logistics_center_controller},
+}
+
+local function register()
+    script.on_event(defines.events.on_built_entity,       on_built, item_filter)
+    script.on_event(defines.events.on_robot_built_entity, on_built, item_filter)
+    script.on_event(defines.events.script_raised_built,   on_built, item_filter)
+    script.on_event(defines.events.script_raised_revive,  on_built, item_filter)
+end
+
+register()

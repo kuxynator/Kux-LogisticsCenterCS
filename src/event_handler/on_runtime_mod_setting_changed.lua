@@ -1,7 +1,7 @@
 
 ---Called when a runtime mod setting is changed by a player.
 ---@param event any
-function on_runtime_mod_setting_changed(event)
+local function on_runtime_mod_setting_changed(event)
     if event.setting_type == 'runtime-global' then
         local setting = event.setting
         if setting == g_names.lc_animation then
@@ -15,3 +15,5 @@ function on_runtime_mod_setting_changed(event)
     -- else --- 'runtime-per-user'
     end
 end
+
+script.on_event(defines.events.on_runtime_mod_setting_changed, on_runtime_mod_setting_changed)

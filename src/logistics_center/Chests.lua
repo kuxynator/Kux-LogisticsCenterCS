@@ -120,6 +120,7 @@ function Chests.add(entity, chest_type)
     --]]
 end
 
+
 ---Gets the index of the chest
 ---@param chestStorage ChestStorage
 ---@param entity LuaEntity
