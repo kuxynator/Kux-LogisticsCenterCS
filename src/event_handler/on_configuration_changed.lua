@@ -50,7 +50,7 @@ local function on_configuration_changed(data)
 
     if(data.mod_changes[mod.name]) then
         local changes = data.mod_changes[mod.name] --[[@as ModChangeData]]
-        if(Version.compare(changes.old_version,"2.4.0") < 0) then
+        if(changes.old_version and Version.compare(changes.old_version,"2.4.0") < 0) then
             print("update chests from old version: "..changes.old_version)
             Chests.rescan()
         end

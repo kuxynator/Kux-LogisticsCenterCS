@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.7
+Date: 2023-08-01
+  Bugfixes:
+    - FIX the crash on comparing version, if the mod is added after game start
+  Changes:
+    - use Kux-CoreLib 2.7.3
+---------------------------------------------------------------------------------------------------
 Version: 2.4.6
 Date: 2023-06-28
   Changes:
